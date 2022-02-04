@@ -1,0 +1,24 @@
+
+accepts input on Hello!
+generates output on Hi!
+accepts input on RequestWithdrawal!
+generates output on Withdrawal!
+
+
+to start passivate in waitforHello!
+when in waitforHello and receive Hello go to sendHi!
+hold in sendHi for time 1!
+after sendHi output Hi!
+from sendHi go to waitforRequestWithdrawal!
+passivate in waitforRequestWithdrawal!
+when in waitforRequestWithdrawal and receive RequestWithdrawal go to CheckBalance!
+hold in CheckBalance for time 20!
+from CheckBalance go to sendWithdrawal!
+hold in sendWithdrawal for time 1!
+after sendWithdrawal output Withdrawal!
+from sendWithdrawal go to passive!
+passivate in passive!
+
+
+
+

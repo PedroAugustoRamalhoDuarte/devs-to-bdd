@@ -1,0 +1,20 @@
+
+accepts input on Money !
+generates output on Withdrawal !
+
+to start,passivate in waitforHello !
+when in waitforHello and receive Hello go to sendHi!
+hold in sendHi for time 1!
+after sendHi output Hi!
+from sendHi go to waitforRequestWithdrawal!
+passivate in waitforRequestWithdrawal !
+when in waitforRequestWithdrawal and receive RequestWithdrawal go to sendRetrieveMoney!
+hold in sendRetrieveMoney for time 1!
+after sendRetrieveMoney output RetrieveMoney!
+from sendRetrieveMoney go to waitforMoney!
+passivate in waitforMoney !
+when in waitforMoney and receive Money go to sendWithdrawal!
+hold in sendWithdrawal for time 1!
+after sendWithdrawal output Withdrawal!
+from sendWithdrawal go to passive!
+passivate in passive!

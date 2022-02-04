@@ -1,0 +1,3 @@
+set name of model as BankTellerExample !
+pruned from BankTellerExample.ses !
+write class files !

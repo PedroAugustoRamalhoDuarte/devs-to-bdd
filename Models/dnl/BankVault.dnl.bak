@@ -1,0 +1,10 @@
+
+accepts input on RetrieveMoney !
+generates output on Money !
+
+to start,passivate in waitforRetrieveMoney !
+when in waitforRetrieveMoney and receive RetrieveMoney go to sendMoney!
+hold in sendMoney for time 1!
+after sendMoney output Money!
+from sendMoney go to passive!
+passivate in passive!

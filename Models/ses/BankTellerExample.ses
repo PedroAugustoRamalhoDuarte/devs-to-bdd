@@ -1,0 +1,7 @@
+From the BankTellerExamplesys perspective, BankTellerExample is made of  Customer, BankTeller, and BankVault!
+From the BankTellerExamplesys perspective, Customer sends Hello to BankTeller!
+From the BankTellerExamplesys perspective, BankTeller sends Hi to Customer!
+From the BankTellerExamplesys perspective, Customer sends RequestWithdrawal to BankTeller!
+From the BankTellerExamplesys perspective, BankTeller sends RetrieveMoney to BankVault!
+From the BankTellerExamplesys perspective, BankVault sends Money to BankTeller!
+From the BankTellerExamplesys perspective, BankTeller sends Withdrawal to Customer!

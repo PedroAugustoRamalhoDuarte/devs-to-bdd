@@ -1,0 +1,22 @@
+
+accepts input on RetrieveMoney!
+generates output on Money!
+
+
+to start passivate in waitforRetrieveMoney!
+when in waitforRetrieveMoney and receive RetrieveMoney go to CheckBalance!
+hold in CheckBalance for time 20!
+from CheckBalance go to CalculateNewAccountBalance!
+hold in CalculateNewAccountBalance for time 5!
+from CalculateNewAccountBalance go to sendMoney!
+hold in sendMoney for time 1!
+after sendMoney output Money!
+from sendMoney go to passive!
+passivate in passive!
+
+
+
+
+internal event for CheckBalance <% 
+// Any Java code
+%> !

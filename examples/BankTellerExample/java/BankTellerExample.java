@@ -1,16 +1,13 @@
-package examples.BankTeller.java;
+package examples.BankTellerExample.java;
 
 import com.ms4systems.devs.core.model.impl.CoupledModelImpl;
 import com.ms4systems.devs.core.message.Port;
 import com.ms4systems.devs.core.simulation.Simulation;
 import com.ms4systems.devs.helpers.impl.SimulationOptionsImpl;
 import com.ms4systems.devs.simviewer.standalone.SimViewer;
-import java.io.Serializable;
 import com.ms4systems.devs.extensions.StateVariableBased;
 import com.ms4systems.devs.core.model.AtomicModel;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.TreeSet;
 
 public class BankTellerExample extends CoupledModelImpl implements StateVariableBased{ 
 	private static final long serialVersionUID = 1L;

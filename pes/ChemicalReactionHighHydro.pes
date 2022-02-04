@@ -1,0 +1,4 @@
+set name of model as ChemicalReactionHighHydro !
+pruned from ChemicalReaction.ses !
+select HighH from HydroConcentration for Hydrogen !
+write class files !

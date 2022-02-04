@@ -1,0 +1,12 @@
+From the reaction perspective, ChemicalReaction is made of ReactProcess, Hydrogen, Oxygen, and Water!
+From the reaction perspective, ChemicalReaction sends StartUp to ReactProcess!
+From the reaction perspective, Hydrogen sends Release to ReactProcess!
+Hydrogen can be LowH or HighH in HydroConcentration!
+From the reaction perspective, Oxygen sends Release to ReactProcess!
+Oxygen can be LowO or HighO in OxyConcentration!
+From the reaction perspective, ReactProcess sends ReleaseTwoMolecules to Hydrogen!
+From the reaction perspective, ReactProcess sends ReleaseOneMolecule to Oxygen!
+From the reaction perspective, ReactProcess sends AcceptOneMolecule to Water!
+From the reaction perspective, Water sends MoleculesOfWater to ChemicalReaction!
+From the reaction perspective, Hydrogen sends MoleculesOfHydrogen to ChemicalReaction!
+From the reaction perspective, Oxygen sends MoleculesOfOxygen to ChemicalReaction!

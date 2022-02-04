@@ -1,0 +1,23 @@
+accepts input on AcceptOneMolecule!
+generates output on MoleculesOfWater with type IntEnt!
+ 
+use MoleculesPresent with type int and default "0"!
+
+ 
+to start passivate in waitForInput!
+when in waitForInput and receive AcceptOneMolecule go to sendRelease!
+hold in sendRelease for time 1!
+from sendRelease go to waitForInput!
+after sendRelease output MoleculesOfWater!
+
+external event for waitForInput with AcceptOneMolecule
+<%
+MoleculesPresent = MoleculesPresent + 1;
+%>!
+ 
+output event for sendRelease
+<%
+if (MoleculesPresent >= 0){
+output.add(outMoleculesOfWater, new IntEnt(MoleculesPresent));
+}
+%>!

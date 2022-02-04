@@ -1,0 +1,38 @@
+accepts input on StartUp!
+accepts input on Release with type IntEnt!
+use Release with type IntEnt!
+generates output on AcceptOneMolecule !
+generates output on ReleaseTwoMolecules!
+generates output on ReleaseOneMolecule!
+use releaseTime with type double and default "0"!
+to start hold in sendRelease for time "releaseTime" !
+//
+passivate in waitForInput!
+when in waitForInput and receive StartUp go to sendRelease!
+when in waitForInput and receive Release go to sendRelease!
+//hold in sendRelease for time "releaseTime" !
+from sendRelease go to waitForInput!
+after sendRelease output Release!
+external event for waitForInput with Release
+<%
+IntEnt Release = null;
+for (Message<IntEnt> msg : messageList) {
+Release = msg.getData();
+if (Release.getValue() == -1) {
+break;
+}
+}
+int income = Release.getValue();
+if (income >0){
+releaseTime = 1;
+}
+else{
+releaseTime = Double.POSITIVE_INFINITY;
+}
+%>!
+output event for sendRelease
+<%
+output.add(outReleaseTwoMolecules, "ReleaseTwoMolecules");
+output.add(outReleaseOneMolecule, "ReleaseOneMolecule");
+output.add(outAcceptOneMolecule, "AcceptOneMolecule");
+%>!

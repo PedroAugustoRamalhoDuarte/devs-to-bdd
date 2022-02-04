@@ -1,0 +1,46 @@
+IntEnt has value!
+the range of IntEnt's value is int!
+ 
+accepts input on ReleaseTwoMolecules!
+generates output on MoleculesOfHydrogen with type IntEnt!
+generates output on Release with type IntEnt!
+
+use MoleculesPresent with type int and default "100"!
+
+ 
+to start passivate in waitForInput!
+when in waitForInput and receive ReleaseTwoMolecules go to sendRelease!
+hold in sendRelease for time 1!
+from sendRelease go to waitForInput!
+after sendRelease output MoleculesOfHydrogen!
+
+initialize variables
+<%
+interpretName();
+%>!
+external event for waitForInput with ReleaseTwoMolecules
+<%
+if (MoleculesPresent >= 0){
+MoleculesPresent = MoleculesPresent - 2;
+}
+%>!
+ 
+output event for sendRelease
+<%
+if (MoleculesPresent >= 2){
+output.add(outRelease, new IntEnt(2));
+}else{
+	output.add(outRelease, new IntEnt(-1));
+	}
+output.add(outMoleculesOfHydrogen, new IntEnt(MoleculesPresent));
+
+%>!
+add additional code
+<%
+void interpretName(){
+	MoleculesPresent = 100;
+	if (getName().contains("Low")){
+		MoleculesPresent = 10;
+	}
+}
+%>!

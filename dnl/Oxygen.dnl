@@ -1,0 +1,44 @@
+accepts input on ReleaseOneMolecule!
+generates output on MoleculesOfOxygen with type IntEnt!
+generates output on Release with type IntEnt!
+ 
+use MoleculesPresent with type int and default "4"!
+
+ 
+to start passivate in waitForInput!
+when in waitForInput and receive ReleaseOneMolecule go to sendRelease!
+hold in sendRelease for time 1!
+from sendRelease go to waitForInput!
+after sendRelease output MoleculesOfOxygen!
+
+initialize variables
+<%
+interpretName();
+%>!
+external event for waitForInput with ReleaseOneMolecule
+<%
+if (MoleculesPresent >= 0){
+MoleculesPresent = MoleculesPresent - 1;
+}
+%>!
+  
+output event for sendRelease <%
+if (MoleculesPresent >= 1){
+output.add(outRelease, new IntEnt(1));
+}
+else{
+	output.add(outRelease, new IntEnt(-1));
+	}
+output.add(outMoleculesOfOxygen, new IntEnt(MoleculesPresent));
+ 
+%>!
+
+add additional code
+<%
+void interpretName(){
+	MoleculesPresent = 100;
+	if (getName().contains("Low")){
+		MoleculesPresent = 10;
+	}
+}
+%>!

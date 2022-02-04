@@ -1,9 +1,9 @@
 /* Do not remove or modify this comment!  It is required for file identification!
 DNL
-platform:/resource/ChemicalReactionExample/src/Models/dnl/Water.dnl
+platform:/resource/ChemicalReactionExample/src/Models/examples.ChemicalReaction.dnl/Water.examples.ChemicalReaction.dnl
 -675328726
  Do not remove or modify this comment!  It is required for file identification! */
-package Models.java;
+package examples.ChemicalReaction.java;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

@@ -1,4 +1,5 @@
-package Models.java;
+package examples.BankTeller.java;
+
 import com.ms4systems.devs.core.model.impl.CoupledModelImpl;
 import com.ms4systems.devs.core.message.Port;
 import com.ms4systems.devs.core.simulation.Simulation;

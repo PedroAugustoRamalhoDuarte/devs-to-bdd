@@ -1,9 +1,9 @@
 /* Do not remove or modify this comment!  It is required for file identification!
 DNL
-platform:/resource/ChemicalReactionExample/src/Models/dnl/ReactProcess.dnl
-1803280508
+platform:/resource/BankTeller/src/Models/examples.ChemicalReaction.dnl/BankVault.examples.ChemicalReaction.dnl
+-562963943
  Do not remove or modify this comment!  It is required for file identification! */
-package Models.java;
+package examples.BankTeller.java;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -30,63 +30,32 @@ import com.ms4systems.devs.helpers.impl.SimulationOptionsImpl;
 import com.ms4systems.devs.simviewer.standalone.SimViewer;
 
 @SuppressWarnings("unused")
-public class ReactProcess extends AtomicModelImpl implements PhaseBased,
+public class BankVault extends AtomicModelImpl implements PhaseBased,
     StateVariableBased {
     private static final long serialVersionUID = 1L;
-
-    //ID:SVAR:0
-    private static final int ID_RELEASE = 0;
-
-    //ENDID
-    //ID:SVAR:1
-    private static final int ID_RELEASETIME = 1;
 
     // Declare state variables
     private PropertyChangeSupport propertyChangeSupport =
         new PropertyChangeSupport(this);
-    protected IntEnt Release;
-    protected double releaseTime = 0;
-
-    //ENDID
-    String phase = "sendRelease";
+    String phase = "waitforRetrieveMoney";
     String previousPhase = null;
-    Double sigma = releaseTime;
+    Double sigma = Double.POSITIVE_INFINITY;
     Double previousSigma = Double.NaN;
 
     // End state variables
 
     // Input ports
     //ID:INP:0
-    public final Port<Serializable> inStartUp =
-        addInputPort("inStartUp", Serializable.class);
-
-    //ENDID
-    //ID:INP:1
-    public final Port<IntEnt> inRelease =
-        addInputPort("inRelease", IntEnt.class);
+    public final Port<Serializable> inRetrieveMoney =
+        addInputPort("inRetrieveMoney", Serializable.class);
 
     //ENDID
     // End input ports
 
     // Output ports
     //ID:OUTP:0
-    public final Port<Serializable> outAcceptOneMolecule =
-        addOutputPort("outAcceptOneMolecule", Serializable.class);
-
-    //ENDID
-    //ID:OUTP:1
-    public final Port<Serializable> outReleaseTwoMolecules =
-        addOutputPort("outReleaseTwoMolecules", Serializable.class);
-
-    //ENDID
-    //ID:OUTP:2
-    public final Port<Serializable> outReleaseOneMolecule =
-        addOutputPort("outReleaseOneMolecule", Serializable.class);
-
-    //ENDID
-    //ID:OUTP:3
-    public final Port<Serializable> outRelease =
-        addOutputPort("outRelease", Serializable.class);
+    public final Port<Serializable> outMoney =
+        addOutputPort("outMoney", Serializable.class);
 
     //ENDID
     // End output ports
@@ -96,15 +65,15 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
     // This variable is just here so we can use @SuppressWarnings("unused")
     private final int unusedIntVariableForWarnings = 0;
 
-    public ReactProcess() {
-        this("ReactProcess");
+    public BankVault() {
+        this("BankVault");
     }
 
-    public ReactProcess(String name) {
+    public BankVault(String name) {
         this(name, null);
     }
 
-    public ReactProcess(String name, Simulator simulator) {
+    public BankVault(String name, Simulator simulator) {
         super(name, simulator);
     }
 
@@ -113,10 +82,7 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
 
         currentTime = 0;
 
-        // Default state variable initialization
-        releaseTime = 0;
-
-        holdIn("sendRelease", releaseTime);
+        passivateIn("waitforRetrieveMoney");
 
     }
 
@@ -124,11 +90,37 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
     public void internalTransition() {
         currentTime += sigma;
 
-        if (phaseIs("sendRelease")) {
-            getSimulator().modelMessage("Internal transition from sendRelease");
+        if (phaseIs("CheckBalance")) {
+            getSimulator().modelMessage("Internal transition from CheckBalance");
 
-            //ID:TRA:sendRelease
-            passivateIn("waitForInput");
+            //ID:TRA:CheckBalance
+            holdIn("CalculateNewAccountBalance", 5.0);
+
+            //ENDID
+            // Internal event code
+            //ID:INT:CheckBalance
+
+            // Any Java code
+
+            //ENDID
+            // End internal event code
+            return;
+        }
+        if (phaseIs("CalculateNewAccountBalance")) {
+            getSimulator()
+                .modelMessage("Internal transition from CalculateNewAccountBalance");
+
+            //ID:TRA:CalculateNewAccountBalance
+            holdIn("sendMoney", 1.0);
+
+            //ENDID
+            return;
+        }
+        if (phaseIs("sendMoney")) {
+            getSimulator().modelMessage("Internal transition from sendMoney");
+
+            //ID:TRA:sendMoney
+            passivateIn("passive");
 
             //ENDID
             return;
@@ -148,39 +140,13 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
         previousSigma = sigma;
 
         // Fire state transition functions
-        if (phaseIs("waitForInput")) {
-            if (input.hasMessages(inStartUp)) {
+        if (phaseIs("waitforRetrieveMoney")) {
+            if (input.hasMessages(inRetrieveMoney)) {
                 ArrayList<Message<Serializable>> messageList =
-                    inStartUp.getMessages(input);
+                    inRetrieveMoney.getMessages(input);
 
-                holdIn("sendRelease", releaseTime);
+                holdIn("CheckBalance", 20.0);
 
-                return;
-            }
-            if (input.hasMessages(inRelease)) {
-                ArrayList<Message<IntEnt>> messageList =
-                    inRelease.getMessages(input);
-
-                holdIn("sendRelease", releaseTime);
-
-                // Fire state and port specific external transition functions
-                //ID:EXT:waitForInput:inRelease
-                IntEnt Release = null;
-                for (Message<IntEnt> msg : messageList) {
-                    Release = msg.getData();
-                    if (Release.getValue() == -1) {
-                        break;
-                    }
-                }
-                int income = Release.getValue();
-                if (income > 0) {
-                    releaseTime = 1;
-                } else {
-                    releaseTime = Double.POSITIVE_INFINITY;
-                }
-
-                //ENDID
-                // End external event code
                 return;
             }
         }
@@ -202,15 +168,8 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
     public MessageBag getOutput() {
         MessageBag output = new MessageBagImpl();
 
-        if (phaseIs("sendRelease")) {
-            // Output event code
-            //ID:OUT:sendRelease
-            output.add(outReleaseTwoMolecules, "ReleaseTwoMolecules");
-            output.add(outReleaseOneMolecule, "ReleaseOneMolecule");
-            output.add(outAcceptOneMolecule, "AcceptOneMolecule");
-
-            //ENDID
-            // End output event code
+        if (phaseIs("sendMoney")) {
+            output.add(outMoney, null);
         }
         return output;
     }
@@ -229,12 +188,12 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
 
         // Uncomment the following line to disable logging for this model
         // options.setDisableLogging(true);
-        ReactProcess model = new ReactProcess();
+        BankVault model = new BankVault();
         model.options = options;
 
         if (options.isDisableViewer()) { // Command line output only
             Simulation sim =
-                new SimulationImpl("ReactProcess Simulation", model, options);
+                new SimulationImpl("BankVault Simulation", model, options);
             sim.startSimulation(0);
             sim.simulateIterations(Long.MAX_VALUE);
         } else { // Use SimViewer
@@ -252,53 +211,21 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
-    // Getter/setter for Release
-    public void setRelease(IntEnt Release) {
-        propertyChangeSupport.firePropertyChange("Release", this.Release,
-            this.Release = Release);
-    }
-
-    public IntEnt getRelease() {
-        return this.Release;
-    }
-
-    // End getter/setter for Release
-
-    // Getter/setter for releaseTime
-    public void setReleaseTime(double releaseTime) {
-        propertyChangeSupport.firePropertyChange("releaseTime",
-            this.releaseTime, this.releaseTime = releaseTime);
-    }
-
-    public double getReleaseTime() {
-        return this.releaseTime;
-    }
-
-    // End getter/setter for releaseTime
-
     // State variables
     public String[] getStateVariableNames() {
-        return new String[] { "Release", "releaseTime" };
+        return new String[] {  };
     }
 
     public Object[] getStateVariableValues() {
-        return new Object[] { Release, releaseTime };
+        return new Object[] {  };
     }
 
     public Class<?>[] getStateVariableTypes() {
-        return new Class<?>[] { IntEnt.class, Double.class };
+        return new Class<?>[] {  };
     }
 
     public void setStateVariableValue(int index, Object value) {
         switch (index) {
-
-            case ID_RELEASE:
-                setRelease((IntEnt) value);
-                return;
-
-            case ID_RELEASETIME:
-                setReleaseTime((Double) value);
-                return;
 
             default:
                 return;
@@ -325,13 +252,13 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
         URI dirUri;
         File dir;
         try {
-            dirUri = ReactProcess.class.getResource(".").toURI();
+            dirUri = BankVault.class.getResource(".").toURI();
             dir = new File(dirUri);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new RuntimeException(
                 "Could not find Models directory. Invalid model URL: " +
-                ReactProcess.class.getResource(".").toString());
+                BankVault.class.getResource(".").toString());
         }
         boolean foundModels = false;
         while (dir != null && dir.getParentFile() != null) {
@@ -379,6 +306,9 @@ public class ReactProcess extends AtomicModelImpl implements PhaseBased,
     }
 
     public String[] getPhaseNames() {
-        return new String[] { "sendRelease", "waitForInput" };
+        return new String[] {
+            "waitforRetrieveMoney", "CheckBalance", "CalculateNewAccountBalance",
+            "sendMoney", "passive"
+        };
     }
 }

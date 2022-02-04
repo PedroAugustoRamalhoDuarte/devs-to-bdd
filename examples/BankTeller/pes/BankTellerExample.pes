@@ -1,0 +1,3 @@
+set name of model as BankTellerExample !
+pruned from BankTellerExample.examples.ChemicalReaction.ses !
+write class files !

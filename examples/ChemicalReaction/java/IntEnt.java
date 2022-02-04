@@ -1,8 +1,8 @@
 /* Do not remove or modify this comment!  It is required for file identification!
 DNL
-platform:/resource/ChemicalReactionExample/src/Models/dnl/Hydrogen.dnl
+platform:/resource/ChemicalReactionExample/src/Models/examples.ChemicalReaction.dnl/Hydrogen.examples.ChemicalReaction.dnl
  Do not remove or modify this comment!  It is required for file identification! */
-package Models.java;
+package examples.ChemicalReaction.java;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package Models.java;
+package examples.ChemicalReaction.java;
 
 import com.ms4systems.devs.core.model.impl.AtomicModelImpl;
 import com.ms4systems.devs.core.message.Port;
@@ -7,12 +7,12 @@ import com.ms4systems.devs.extensions.PhaseBased;
 import com.ms4systems.devs.extensions.ProvidesTooltip;
 import com.ms4systems.devs.extensions.StateVariableBased;
 
-public class HighO_Oxygen extends Oxygen { 
+public class HighH_Hydrogen extends Hydrogen { 
 	private static final long serialVersionUID = 1L;
-	public HighO_Oxygen(){
-		this("HighO_Oxygen");
+	public HighH_Hydrogen(){
+		this("HighH_Hydrogen");
 	}
-	public HighO_Oxygen(String nm) {
+	public HighH_Hydrogen(String nm) {
 		super(nm);
 	}
 }

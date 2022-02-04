@@ -1,9 +1,9 @@
 /* Do not remove or modify this comment!  It is required for file identification!
 DNL
-platform:/resource/BankTeller/src/Models/dnl/Customer.dnl
-159568045
+platform:/resource/ChemicalReactionExample/src/Models/examples.ChemicalReaction.dnl/ReactProcess.examples.ChemicalReaction.dnl
+1803280508
  Do not remove or modify this comment!  It is required for file identification! */
-package Models.java;
+package examples.ChemicalReaction.java;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -30,42 +30,63 @@ import com.ms4systems.devs.helpers.impl.SimulationOptionsImpl;
 import com.ms4systems.devs.simviewer.standalone.SimViewer;
 
 @SuppressWarnings("unused")
-public class Customer extends AtomicModelImpl implements PhaseBased,
+public class ReactProcess extends AtomicModelImpl implements PhaseBased,
     StateVariableBased {
     private static final long serialVersionUID = 1L;
+
+    //ID:SVAR:0
+    private static final int ID_RELEASE = 0;
+
+    //ENDID
+    //ID:SVAR:1
+    private static final int ID_RELEASETIME = 1;
 
     // Declare state variables
     private PropertyChangeSupport propertyChangeSupport =
         new PropertyChangeSupport(this);
-    String phase = "sendHello";
+    protected IntEnt Release;
+    protected double releaseTime = 0;
+
+    //ENDID
+    String phase = "sendRelease";
     String previousPhase = null;
-    Double sigma = 1.0;
+    Double sigma = releaseTime;
     Double previousSigma = Double.NaN;
 
     // End state variables
 
     // Input ports
     //ID:INP:0
-    public final Port<Serializable> inWithdrawal =
-        addInputPort("inWithdrawal", Serializable.class);
+    public final Port<Serializable> inStartUp =
+        addInputPort("inStartUp", Serializable.class);
 
     //ENDID
     //ID:INP:1
-    public final Port<Serializable> inHi =
-        addInputPort("inHi", Serializable.class);
+    public final Port<IntEnt> inRelease =
+        addInputPort("inRelease", IntEnt.class);
 
     //ENDID
     // End input ports
 
     // Output ports
     //ID:OUTP:0
-    public final Port<Serializable> outRequestWithdrawal =
-        addOutputPort("outRequestWithdrawal", Serializable.class);
+    public final Port<Serializable> outAcceptOneMolecule =
+        addOutputPort("outAcceptOneMolecule", Serializable.class);
 
     //ENDID
     //ID:OUTP:1
-    public final Port<Serializable> outHello =
-        addOutputPort("outHello", Serializable.class);
+    public final Port<Serializable> outReleaseTwoMolecules =
+        addOutputPort("outReleaseTwoMolecules", Serializable.class);
+
+    //ENDID
+    //ID:OUTP:2
+    public final Port<Serializable> outReleaseOneMolecule =
+        addOutputPort("outReleaseOneMolecule", Serializable.class);
+
+    //ENDID
+    //ID:OUTP:3
+    public final Port<Serializable> outRelease =
+        addOutputPort("outRelease", Serializable.class);
 
     //ENDID
     // End output ports
@@ -75,15 +96,15 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
     // This variable is just here so we can use @SuppressWarnings("unused")
     private final int unusedIntVariableForWarnings = 0;
 
-    public Customer() {
-        this("Customer");
+    public ReactProcess() {
+        this("ReactProcess");
     }
 
-    public Customer(String name) {
+    public ReactProcess(String name) {
         this(name, null);
     }
 
-    public Customer(String name, Simulator simulator) {
+    public ReactProcess(String name, Simulator simulator) {
         super(name, simulator);
     }
 
@@ -92,7 +113,10 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
 
         currentTime = 0;
 
-        holdIn("sendHello", 1.0);
+        // Default state variable initialization
+        releaseTime = 0;
+
+        holdIn("sendRelease", releaseTime);
 
     }
 
@@ -100,21 +124,11 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
     public void internalTransition() {
         currentTime += sigma;
 
-        if (phaseIs("sendHello")) {
-            getSimulator().modelMessage("Internal transition from sendHello");
+        if (phaseIs("sendRelease")) {
+            getSimulator().modelMessage("Internal transition from sendRelease");
 
-            //ID:TRA:sendHello
-            passivateIn("waitforHi");
-
-            //ENDID
-            return;
-        }
-        if (phaseIs("sendRequestWithdrawal")) {
-            getSimulator()
-                .modelMessage("Internal transition from sendRequestWithdrawal");
-
-            //ID:TRA:sendRequestWithdrawal
-            passivateIn("waitforWithdrawal");
+            //ID:TRA:sendRelease
+            passivateIn("waitForInput");
 
             //ENDID
             return;
@@ -134,24 +148,39 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
         previousSigma = sigma;
 
         // Fire state transition functions
-        if (phaseIs("waitforHi")) {
-            if (input.hasMessages(inHi)) {
+        if (phaseIs("waitForInput")) {
+            if (input.hasMessages(inStartUp)) {
                 ArrayList<Message<Serializable>> messageList =
-                    inHi.getMessages(input);
+                    inStartUp.getMessages(input);
 
-                holdIn("sendRequestWithdrawal", 1.0);
+                holdIn("sendRelease", releaseTime);
 
                 return;
             }
-        }
+            if (input.hasMessages(inRelease)) {
+                ArrayList<Message<IntEnt>> messageList =
+                    inRelease.getMessages(input);
 
-        if (phaseIs("waitforWithdrawal")) {
-            if (input.hasMessages(inWithdrawal)) {
-                ArrayList<Message<Serializable>> messageList =
-                    inWithdrawal.getMessages(input);
+                holdIn("sendRelease", releaseTime);
 
-                passivateIn("passive");
+                // Fire state and port specific external transition functions
+                //ID:EXT:waitForInput:inRelease
+                IntEnt Release = null;
+                for (Message<IntEnt> msg : messageList) {
+                    Release = msg.getData();
+                    if (Release.getValue() == -1) {
+                        break;
+                    }
+                }
+                int income = Release.getValue();
+                if (income > 0) {
+                    releaseTime = 1;
+                } else {
+                    releaseTime = Double.POSITIVE_INFINITY;
+                }
 
+                //ENDID
+                // End external event code
                 return;
             }
         }
@@ -173,11 +202,15 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
     public MessageBag getOutput() {
         MessageBag output = new MessageBagImpl();
 
-        if (phaseIs("sendHello")) {
-            output.add(outHello, null);
-        }
-        if (phaseIs("sendRequestWithdrawal")) {
-            output.add(outRequestWithdrawal, null);
+        if (phaseIs("sendRelease")) {
+            // Output event code
+            //ID:OUT:sendRelease
+            output.add(outReleaseTwoMolecules, "ReleaseTwoMolecules");
+            output.add(outReleaseOneMolecule, "ReleaseOneMolecule");
+            output.add(outAcceptOneMolecule, "AcceptOneMolecule");
+
+            //ENDID
+            // End output event code
         }
         return output;
     }
@@ -196,12 +229,12 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
 
         // Uncomment the following line to disable logging for this model
         // options.setDisableLogging(true);
-        Customer model = new Customer();
+        ReactProcess model = new ReactProcess();
         model.options = options;
 
         if (options.isDisableViewer()) { // Command line output only
             Simulation sim =
-                new SimulationImpl("Customer Simulation", model, options);
+                new SimulationImpl("ReactProcess Simulation", model, options);
             sim.startSimulation(0);
             sim.simulateIterations(Long.MAX_VALUE);
         } else { // Use SimViewer
@@ -219,21 +252,53 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
+    // Getter/setter for Release
+    public void setRelease(IntEnt Release) {
+        propertyChangeSupport.firePropertyChange("Release", this.Release,
+            this.Release = Release);
+    }
+
+    public IntEnt getRelease() {
+        return this.Release;
+    }
+
+    // End getter/setter for Release
+
+    // Getter/setter for releaseTime
+    public void setReleaseTime(double releaseTime) {
+        propertyChangeSupport.firePropertyChange("releaseTime",
+            this.releaseTime, this.releaseTime = releaseTime);
+    }
+
+    public double getReleaseTime() {
+        return this.releaseTime;
+    }
+
+    // End getter/setter for releaseTime
+
     // State variables
     public String[] getStateVariableNames() {
-        return new String[] {  };
+        return new String[] { "Release", "releaseTime" };
     }
 
     public Object[] getStateVariableValues() {
-        return new Object[] {  };
+        return new Object[] { Release, releaseTime };
     }
 
     public Class<?>[] getStateVariableTypes() {
-        return new Class<?>[] {  };
+        return new Class<?>[] { IntEnt.class, Double.class };
     }
 
     public void setStateVariableValue(int index, Object value) {
         switch (index) {
+
+            case ID_RELEASE:
+                setRelease((IntEnt) value);
+                return;
+
+            case ID_RELEASETIME:
+                setReleaseTime((Double) value);
+                return;
 
             default:
                 return;
@@ -260,13 +325,13 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
         URI dirUri;
         File dir;
         try {
-            dirUri = Customer.class.getResource(".").toURI();
+            dirUri = ReactProcess.class.getResource(".").toURI();
             dir = new File(dirUri);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new RuntimeException(
                 "Could not find Models directory. Invalid model URL: " +
-                Customer.class.getResource(".").toString());
+                ReactProcess.class.getResource(".").toString());
         }
         boolean foundModels = false;
         while (dir != null && dir.getParentFile() != null) {
@@ -314,9 +379,6 @@ public class Customer extends AtomicModelImpl implements PhaseBased,
     }
 
     public String[] getPhaseNames() {
-        return new String[] {
-            "sendHello", "waitforHi", "sendRequestWithdrawal",
-            "waitforWithdrawal", "passive"
-        };
+        return new String[] { "sendRelease", "waitForInput" };
     }
 }

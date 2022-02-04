@@ -1,9 +1,9 @@
 /* Do not remove or modify this comment!  It is required for file identification!
 DNL
-platform:/resource/BankTeller/src/Models/dnl/BankVault.dnl
--562963943
+platform:/resource/BankTeller/src/Models/examples.ChemicalReaction.dnl/Customer.examples.ChemicalReaction.dnl
+159568045
  Do not remove or modify this comment!  It is required for file identification! */
-package Models.java;
+package examples.BankTeller.java;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -30,32 +30,42 @@ import com.ms4systems.devs.helpers.impl.SimulationOptionsImpl;
 import com.ms4systems.devs.simviewer.standalone.SimViewer;
 
 @SuppressWarnings("unused")
-public class BankVault extends AtomicModelImpl implements PhaseBased,
+public class Customer extends AtomicModelImpl implements PhaseBased,
     StateVariableBased {
     private static final long serialVersionUID = 1L;
 
     // Declare state variables
     private PropertyChangeSupport propertyChangeSupport =
         new PropertyChangeSupport(this);
-    String phase = "waitforRetrieveMoney";
+    String phase = "sendHello";
     String previousPhase = null;
-    Double sigma = Double.POSITIVE_INFINITY;
+    Double sigma = 1.0;
     Double previousSigma = Double.NaN;
 
     // End state variables
 
     // Input ports
     //ID:INP:0
-    public final Port<Serializable> inRetrieveMoney =
-        addInputPort("inRetrieveMoney", Serializable.class);
+    public final Port<Serializable> inWithdrawal =
+        addInputPort("inWithdrawal", Serializable.class);
+
+    //ENDID
+    //ID:INP:1
+    public final Port<Serializable> inHi =
+        addInputPort("inHi", Serializable.class);
 
     //ENDID
     // End input ports
 
     // Output ports
     //ID:OUTP:0
-    public final Port<Serializable> outMoney =
-        addOutputPort("outMoney", Serializable.class);
+    public final Port<Serializable> outRequestWithdrawal =
+        addOutputPort("outRequestWithdrawal", Serializable.class);
+
+    //ENDID
+    //ID:OUTP:1
+    public final Port<Serializable> outHello =
+        addOutputPort("outHello", Serializable.class);
 
     //ENDID
     // End output ports
@@ -65,15 +75,15 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
     // This variable is just here so we can use @SuppressWarnings("unused")
     private final int unusedIntVariableForWarnings = 0;
 
-    public BankVault() {
-        this("BankVault");
+    public Customer() {
+        this("Customer");
     }
 
-    public BankVault(String name) {
+    public Customer(String name) {
         this(name, null);
     }
 
-    public BankVault(String name, Simulator simulator) {
+    public Customer(String name, Simulator simulator) {
         super(name, simulator);
     }
 
@@ -82,7 +92,7 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
 
         currentTime = 0;
 
-        passivateIn("waitforRetrieveMoney");
+        holdIn("sendHello", 1.0);
 
     }
 
@@ -90,37 +100,21 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
     public void internalTransition() {
         currentTime += sigma;
 
-        if (phaseIs("CheckBalance")) {
-            getSimulator().modelMessage("Internal transition from CheckBalance");
+        if (phaseIs("sendHello")) {
+            getSimulator().modelMessage("Internal transition from sendHello");
 
-            //ID:TRA:CheckBalance
-            holdIn("CalculateNewAccountBalance", 5.0);
-
-            //ENDID
-            // Internal event code
-            //ID:INT:CheckBalance
-
-            // Any Java code
+            //ID:TRA:sendHello
+            passivateIn("waitforHi");
 
             //ENDID
-            // End internal event code
             return;
         }
-        if (phaseIs("CalculateNewAccountBalance")) {
+        if (phaseIs("sendRequestWithdrawal")) {
             getSimulator()
-                .modelMessage("Internal transition from CalculateNewAccountBalance");
+                .modelMessage("Internal transition from sendRequestWithdrawal");
 
-            //ID:TRA:CalculateNewAccountBalance
-            holdIn("sendMoney", 1.0);
-
-            //ENDID
-            return;
-        }
-        if (phaseIs("sendMoney")) {
-            getSimulator().modelMessage("Internal transition from sendMoney");
-
-            //ID:TRA:sendMoney
-            passivateIn("passive");
+            //ID:TRA:sendRequestWithdrawal
+            passivateIn("waitforWithdrawal");
 
             //ENDID
             return;
@@ -140,12 +134,23 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
         previousSigma = sigma;
 
         // Fire state transition functions
-        if (phaseIs("waitforRetrieveMoney")) {
-            if (input.hasMessages(inRetrieveMoney)) {
+        if (phaseIs("waitforHi")) {
+            if (input.hasMessages(inHi)) {
                 ArrayList<Message<Serializable>> messageList =
-                    inRetrieveMoney.getMessages(input);
+                    inHi.getMessages(input);
 
-                holdIn("CheckBalance", 20.0);
+                holdIn("sendRequestWithdrawal", 1.0);
+
+                return;
+            }
+        }
+
+        if (phaseIs("waitforWithdrawal")) {
+            if (input.hasMessages(inWithdrawal)) {
+                ArrayList<Message<Serializable>> messageList =
+                    inWithdrawal.getMessages(input);
+
+                passivateIn("passive");
 
                 return;
             }
@@ -168,8 +173,11 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
     public MessageBag getOutput() {
         MessageBag output = new MessageBagImpl();
 
-        if (phaseIs("sendMoney")) {
-            output.add(outMoney, null);
+        if (phaseIs("sendHello")) {
+            output.add(outHello, null);
+        }
+        if (phaseIs("sendRequestWithdrawal")) {
+            output.add(outRequestWithdrawal, null);
         }
         return output;
     }
@@ -188,12 +196,12 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
 
         // Uncomment the following line to disable logging for this model
         // options.setDisableLogging(true);
-        BankVault model = new BankVault();
+        Customer model = new Customer();
         model.options = options;
 
         if (options.isDisableViewer()) { // Command line output only
             Simulation sim =
-                new SimulationImpl("BankVault Simulation", model, options);
+                new SimulationImpl("Customer Simulation", model, options);
             sim.startSimulation(0);
             sim.simulateIterations(Long.MAX_VALUE);
         } else { // Use SimViewer
@@ -252,13 +260,13 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
         URI dirUri;
         File dir;
         try {
-            dirUri = BankVault.class.getResource(".").toURI();
+            dirUri = Customer.class.getResource(".").toURI();
             dir = new File(dirUri);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new RuntimeException(
                 "Could not find Models directory. Invalid model URL: " +
-                BankVault.class.getResource(".").toString());
+                Customer.class.getResource(".").toString());
         }
         boolean foundModels = false;
         while (dir != null && dir.getParentFile() != null) {
@@ -307,8 +315,8 @@ public class BankVault extends AtomicModelImpl implements PhaseBased,
 
     public String[] getPhaseNames() {
         return new String[] {
-            "waitforRetrieveMoney", "CheckBalance", "CalculateNewAccountBalance",
-            "sendMoney", "passive"
+            "sendHello", "waitforHi", "sendRequestWithdrawal",
+            "waitforWithdrawal", "passive"
         };
     }
 }

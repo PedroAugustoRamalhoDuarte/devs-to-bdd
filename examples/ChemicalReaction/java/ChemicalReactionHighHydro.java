@@ -1,4 +1,5 @@
-package Models.java;
+package examples.ChemicalReaction.java;
+
 import com.ms4systems.devs.core.model.impl.CoupledModelImpl;
 import com.ms4systems.devs.core.message.Port;
 import com.ms4systems.devs.core.simulation.Simulation;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.TreeSet;
 
-public class ChemicalReaction extends CoupledModelImpl implements StateVariableBased{ 
+public class ChemicalReactionHighHydro extends CoupledModelImpl implements StateVariableBased{ 
 	private static final long serialVersionUID = 1L;
 	protected SimulationOptionsImpl options = new SimulationOptionsImpl();
 	
@@ -19,10 +20,10 @@ public class ChemicalReaction extends CoupledModelImpl implements StateVariableB
 		public final Port<? extends Serializable> outMoleculesOfOxygen= addOutputPort("outMoleculesOfOxygen",Serializable.class);
 		public final Port<? extends Serializable> outMoleculesOfHydrogen= addOutputPort("outMoleculesOfHydrogen",Serializable.class);
 		public final Port<? extends Serializable> outMoleculesOfWater= addOutputPort("outMoleculesOfWater",Serializable.class);
-	public ChemicalReaction(){
-		this("ChemicalReaction");
+	public ChemicalReactionHighHydro(){
+		this("ChemicalReactionHighHydro");
 	}
-	public ChemicalReaction(String nm) {
+	public ChemicalReactionHighHydro(String nm) {
 		super(nm);
 		make();
 	}
@@ -98,10 +99,10 @@ public class ChemicalReaction extends CoupledModelImpl implements StateVariableB
     
 	public static void main(String[] args){
 		SimulationOptionsImpl options = new SimulationOptionsImpl(args, true);
-		ChemicalReaction model = new ChemicalReaction();
+		ChemicalReactionHighHydro model = new ChemicalReactionHighHydro();
 		model.options = options;
 		if(options.isDisableViewer()){ // Command Line output only
-			Simulation sim = new com.ms4systems.devs.core.simulation.impl.SimulationImpl("ChemicalReaction Simulation",model,options);
+			Simulation sim = new com.ms4systems.devs.core.simulation.impl.SimulationImpl("ChemicalReactionHighHydro Simulation",model,options);
 			sim.startSimulation(0);
 			sim.simulateIterations(Long.MAX_VALUE);
 		}else { //Use SimViewer

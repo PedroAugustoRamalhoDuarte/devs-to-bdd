@@ -1,9 +1,9 @@
 /* Do not remove or modify this comment!  It is required for file identification!
 DNL
-platform:/resource/BankTeller/src/Models/dnl/BankTeller.dnl
--148672963
+platform:/resource/ChemicalReactionExample/src/Models/examples.ChemicalReaction.dnl/Hydrogen.examples.ChemicalReaction.dnl
+-1357276022
  Do not remove or modify this comment!  It is required for file identification! */
-package Models.java;
+package examples.ChemicalReaction.java;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -30,14 +30,20 @@ import com.ms4systems.devs.helpers.impl.SimulationOptionsImpl;
 import com.ms4systems.devs.simviewer.standalone.SimViewer;
 
 @SuppressWarnings("unused")
-public class BankTeller extends AtomicModelImpl implements PhaseBased,
+public class Hydrogen extends AtomicModelImpl implements PhaseBased,
     StateVariableBased {
     private static final long serialVersionUID = 1L;
+
+    //ID:SVAR:0
+    private static final int ID_MOLECULESPRESENT = 0;
 
     // Declare state variables
     private PropertyChangeSupport propertyChangeSupport =
         new PropertyChangeSupport(this);
-    String phase = "waitforHello";
+    protected int MoleculesPresent = 100;
+
+    //ENDID
+    String phase = "waitForInput";
     String previousPhase = null;
     Double sigma = Double.POSITIVE_INFINITY;
     Double previousSigma = Double.NaN;
@@ -46,36 +52,21 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
 
     // Input ports
     //ID:INP:0
-    public final Port<Serializable> inMoney =
-        addInputPort("inMoney", Serializable.class);
-
-    //ENDID
-    //ID:INP:1
-    public final Port<Serializable> inHello =
-        addInputPort("inHello", Serializable.class);
-
-    //ENDID
-    //ID:INP:2
-    public final Port<Serializable> inRequestWithdrawal =
-        addInputPort("inRequestWithdrawal", Serializable.class);
+    public final Port<Serializable> inReleaseTwoMolecules =
+        addInputPort("inReleaseTwoMolecules", Serializable.class);
 
     //ENDID
     // End input ports
 
     // Output ports
     //ID:OUTP:0
-    public final Port<Serializable> outWithdrawal =
-        addOutputPort("outWithdrawal", Serializable.class);
+    public final Port<IntEnt> outMoleculesOfHydrogen =
+        addOutputPort("outMoleculesOfHydrogen", IntEnt.class);
 
     //ENDID
     //ID:OUTP:1
-    public final Port<Serializable> outHi =
-        addOutputPort("outHi", Serializable.class);
-
-    //ENDID
-    //ID:OUTP:2
-    public final Port<Serializable> outRetrieveMoney =
-        addOutputPort("outRetrieveMoney", Serializable.class);
+    public final Port<IntEnt> outRelease =
+        addOutputPort("outRelease", IntEnt.class);
 
     //ENDID
     // End output ports
@@ -85,15 +76,15 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
     // This variable is just here so we can use @SuppressWarnings("unused")
     private final int unusedIntVariableForWarnings = 0;
 
-    public BankTeller() {
-        this("BankTeller");
+    public Hydrogen() {
+        this("Hydrogen");
     }
 
-    public BankTeller(String name) {
+    public Hydrogen(String name) {
         this(name, null);
     }
 
-    public BankTeller(String name, Simulator simulator) {
+    public Hydrogen(String name, Simulator simulator) {
         super(name, simulator);
     }
 
@@ -102,39 +93,28 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
 
         currentTime = 0;
 
-        passivateIn("waitforHello");
+        // Default state variable initialization
+        MoleculesPresent = 100;
 
+        passivateIn("waitForInput");
+
+        // Initialize Variables
+        //ID:INIT
+        interpretName();
+
+        //ENDID
+        // End initialize variables
     }
 
     @Override
     public void internalTransition() {
         currentTime += sigma;
 
-        if (phaseIs("sendHi")) {
-            getSimulator().modelMessage("Internal transition from sendHi");
+        if (phaseIs("sendRelease")) {
+            getSimulator().modelMessage("Internal transition from sendRelease");
 
-            //ID:TRA:sendHi
-            passivateIn("waitforRequestWithdrawal");
-
-            //ENDID
-            return;
-        }
-        if (phaseIs("sendRetrieveMoney")) {
-            getSimulator()
-                .modelMessage("Internal transition from sendRetrieveMoney");
-
-            //ID:TRA:sendRetrieveMoney
-            passivateIn("waitforMoney");
-
-            //ENDID
-            return;
-        }
-        if (phaseIs("sendWithdrawal")) {
-            getSimulator()
-                .modelMessage("Internal transition from sendWithdrawal");
-
-            //ID:TRA:sendWithdrawal
-            passivateIn("passive");
+            //ID:TRA:sendRelease
+            passivateIn("waitForInput");
 
             //ENDID
             return;
@@ -154,35 +134,21 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
         previousSigma = sigma;
 
         // Fire state transition functions
-        if (phaseIs("waitforHello")) {
-            if (input.hasMessages(inHello)) {
+        if (phaseIs("waitForInput")) {
+            if (input.hasMessages(inReleaseTwoMolecules)) {
                 ArrayList<Message<Serializable>> messageList =
-                    inHello.getMessages(input);
+                    inReleaseTwoMolecules.getMessages(input);
 
-                holdIn("sendHi", 1.0);
+                holdIn("sendRelease", 1.0);
 
-                return;
-            }
-        }
+                // Fire state and port specific external transition functions
+                //ID:EXT:waitForInput:inReleaseTwoMolecules
+                if (MoleculesPresent >= 0) {
+                    MoleculesPresent = MoleculesPresent - 2;
+                }
 
-        if (phaseIs("waitforRequestWithdrawal")) {
-            if (input.hasMessages(inRequestWithdrawal)) {
-                ArrayList<Message<Serializable>> messageList =
-                    inRequestWithdrawal.getMessages(input);
-
-                holdIn("sendRetrieveMoney", 1.0);
-
-                return;
-            }
-        }
-
-        if (phaseIs("waitforMoney")) {
-            if (input.hasMessages(inMoney)) {
-                ArrayList<Message<Serializable>> messageList =
-                    inMoney.getMessages(input);
-
-                holdIn("sendWithdrawal", 1.0);
-
+                //ENDID
+                // End external event code
                 return;
             }
         }
@@ -204,19 +170,34 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
     public MessageBag getOutput() {
         MessageBag output = new MessageBagImpl();
 
-        if (phaseIs("sendHi")) {
-            output.add(outHi, null);
-        }
-        if (phaseIs("sendRetrieveMoney")) {
-            output.add(outRetrieveMoney, null);
-        }
-        if (phaseIs("sendWithdrawal")) {
-            output.add(outWithdrawal, null);
+        if (phaseIs("sendRelease")) {
+
+            // Output event code
+            //ID:OUT:sendRelease
+            if (MoleculesPresent >= 2) {
+                output.add(outRelease, new IntEnt(2));
+            } else {
+                output.add(outRelease, new IntEnt(-1));
+            }
+            output.add(outMoleculesOfHydrogen, new IntEnt(MoleculesPresent));
+
+            //ENDID
+            // End output event code
         }
         return output;
     }
 
     // Custom function definitions
+
+    //ID:CUST:0
+    void interpretName() {
+        MoleculesPresent = 100;
+        if (getName().contains("Low")) {
+            MoleculesPresent = 10;
+        }
+    }
+
+    //ENDID
 
     // End custom function definitions
     public static void main(String[] args) {
@@ -230,12 +211,12 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
 
         // Uncomment the following line to disable logging for this model
         // options.setDisableLogging(true);
-        BankTeller model = new BankTeller();
+        Hydrogen model = new Hydrogen();
         model.options = options;
 
         if (options.isDisableViewer()) { // Command line output only
             Simulation sim =
-                new SimulationImpl("BankTeller Simulation", model, options);
+                new SimulationImpl("Hydrogen Simulation", model, options);
             sim.startSimulation(0);
             sim.simulateIterations(Long.MAX_VALUE);
         } else { // Use SimViewer
@@ -253,21 +234,37 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
+    // Getter/setter for MoleculesPresent
+    public void setMoleculesPresent(int MoleculesPresent) {
+        propertyChangeSupport.firePropertyChange("MoleculesPresent",
+            this.MoleculesPresent, this.MoleculesPresent = MoleculesPresent);
+    }
+
+    public int getMoleculesPresent() {
+        return this.MoleculesPresent;
+    }
+
+    // End getter/setter for MoleculesPresent
+
     // State variables
     public String[] getStateVariableNames() {
-        return new String[] {  };
+        return new String[] { "MoleculesPresent" };
     }
 
     public Object[] getStateVariableValues() {
-        return new Object[] {  };
+        return new Object[] { MoleculesPresent };
     }
 
     public Class<?>[] getStateVariableTypes() {
-        return new Class<?>[] {  };
+        return new Class<?>[] { Integer.class };
     }
 
     public void setStateVariableValue(int index, Object value) {
         switch (index) {
+
+            case ID_MOLECULESPRESENT:
+                setMoleculesPresent((Integer) value);
+                return;
 
             default:
                 return;
@@ -294,13 +291,13 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
         URI dirUri;
         File dir;
         try {
-            dirUri = BankTeller.class.getResource(".").toURI();
+            dirUri = Hydrogen.class.getResource(".").toURI();
             dir = new File(dirUri);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             throw new RuntimeException(
                 "Could not find Models directory. Invalid model URL: " +
-                BankTeller.class.getResource(".").toString());
+                Hydrogen.class.getResource(".").toString());
         }
         boolean foundModels = false;
         while (dir != null && dir.getParentFile() != null) {
@@ -348,9 +345,6 @@ public class BankTeller extends AtomicModelImpl implements PhaseBased,
     }
 
     public String[] getPhaseNames() {
-        return new String[] {
-            "waitforHello", "sendHi", "waitforRequestWithdrawal",
-            "sendRetrieveMoney", "waitforMoney", "sendWithdrawal", "passive"
-        };
+        return new String[] { "waitForInput", "sendRelease" };
     }
 }

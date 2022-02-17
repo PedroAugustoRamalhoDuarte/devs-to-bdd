@@ -1,25 +1,44 @@
-example_name = "BankTellerExample"
-ses_file = File.open("examples/#{example_name}/ses/#{example_name}.ses")
-
-file_data = ses_file.readlines.map(&:chomp)
-
 def components_from_line(line)
   line.split('of')[1].split()
 end
 
 def extract_event(line)
+  delimiters = [/\bto\b/, /\bsends\b/]
+  line = line.split(',')[1]
+  line_splited = line.split(Regexp.union(delimiters))
+  {
+    sender: line_splited[-3].strip,
+    action: line_splited[-2].strip,
+    receiver: line_splited[-1][..-2].strip # Removes !
+  }
 end
 
-components = []
-list = []
-file_data.each do |line|
-  if line.include? "is made of"
-    components = components_from_line(line)
-  elsif line.include? "From then"
-    list = []
+def test_cases_hash(example_name)
+  example_name = example_name
+  ses_file = File.open("examples/#{example_name}/ses/#{example_name}.ses")
+
+  file_data = ses_file.readlines.map(&:chomp)
+
+  event_list = []
+  test_cases = []
+  file_data.each do |line|
+    # Extract components
+    if line.include? "is made of"
+      # passs
+    elsif line.include? "From the" # Extract events
+      event = extract_event(line)
+      event_list.append(event)
+
+      # If the first sender is now the receiver
+      if event[:receiver] == event_list[0][:sender]
+        # Closes one test case
+        test_cases.append(event_list.dup)
+        event_list.clear
+      end
+    end
   end
+
+  ses_file.close
+
+  test_cases
 end
-
-ses_file.close
-
-

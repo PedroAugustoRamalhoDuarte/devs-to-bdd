@@ -1,0 +1,16 @@
+From the JazzBandsys perspective, JazzBand is made of  BandLeader, RhythmSection, HornSection, and ReedSection!
+From the JazzBandsys perspective, BandLeader sends PlayBeat to RhythmSection!
+From the JazzBandsys perspective, RhythmSection sends Beat to BandLeader!
+From the JazzBandsys perspective, BandLeader sends PlayBrass to HornSection!
+From the JazzBandsys perspective, HornSection sends BrassSound to BandLeader!
+From the JazzBandsys perspective, BandLeader sends DontPlay to HornSection!
+From the JazzBandsys perspective, HornSection sends Quiet to BandLeader!
+From the JazzBandsys perspective, BandLeader sends PlayReed to ReedSection!
+From the JazzBandsys perspective, ReedSection sends ReedSound to BandLeader!
+From the JazzBandsys perspective, BandLeader sends PlayTogether to HornSection!
+From the JazzBandsys perspective, BandLeader sends EndInSequence to RhythmSection!
+From the JazzBandsys perspective, BandLeader sends EndInSequence to HornSection!
+From the JazzBandsys perspective, BandLeader sends EndInSequence to ReedSection!
+From the JazzBandsys perspective, ReedSection sends FadeOut to BandLeader!
+From the JazzBandsys perspective, HornSection sends FadeOut to BandLeader!
+From the JazzBandsys perspective, RhythmSection sends FadeOut to BandLeader!

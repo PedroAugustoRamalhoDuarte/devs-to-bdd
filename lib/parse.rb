@@ -69,4 +69,4 @@ def bdd_from_test_cases(test_cases_hash, feature_name = "Test")
   end
 end
 
-bdd_from_test_cases(test_cases_hash("BankTellerExample"))
+bdd_from_test_cases(test_cases_hash("BankTellerExample"), "BankTeller")

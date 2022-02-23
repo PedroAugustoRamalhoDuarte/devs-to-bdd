@@ -1,3 +1,5 @@
+require_relative 'event'
+
 def components_from_line(line)
   line.split('of')[1].split()
 end
@@ -6,11 +8,9 @@ def extract_event(line)
   delimiters = [/\bto\b/, /\bsends\b/]
   line = line.split(',')[1]
   line_splited = line.split(Regexp.union(delimiters))
-  {
-    sender: line_splited[-3].strip,
-    action: line_splited[-2].strip,
-    receiver: line_splited[-1][..-2].strip # Removes !
-  }
+  Event.new(sender: line_splited[-3].strip,
+            action: line_splited[-2].strip,
+            receiver: line_splited[-1][..-2].strip)
 end
 
 def test_cases_hash(example_name)
@@ -30,7 +30,7 @@ def test_cases_hash(example_name)
       event_list.append(event)
 
       # If the first sender is now the receiver
-      if event[:receiver] == event_list[0][:sender]
+      if event.receiver == event_list[0].sender
         # Closes one test case
         test_cases.append(event_list.dup)
         event_list.clear
@@ -63,7 +63,7 @@ def bdd_from_test_cases(test_cases_hash, feature_name = "Test")
     test_cases_hash.each_with_index do |test_case, index|
       file.write("\tScenario: #{index}\n")
       test_case.each do |event|
-        file.write("\t\t#{test_case_tag(event, test_case)} #{event_to_s(event)}\n")
+        file.write("\t\t#{test_case_tag(event, test_case)} #{event.to_s}\n")
       end
     end
   end

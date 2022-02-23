@@ -1,2 +1,4 @@
 .idea
 devs-to-bdd.iml
+
+output/*.feature

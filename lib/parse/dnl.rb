@@ -1,7 +1,6 @@
 module Parse::Dnl
   def self.get_passivate_event(line)
-    # TODO: Improves filter
-    line.split()[-2]
+    line.split()[-1]
   end
 
   def self.test_cases_hash(example_name, dnl_name)
@@ -12,6 +11,7 @@ module Parse::Dnl
     event_hash = {}
     actual_event = nil
     file_data.each do |line|
+      line = line.delete("!")
       if line.include? "passivate"
         actual_event = get_passivate_event(line)
         event_hash[actual_event] = []

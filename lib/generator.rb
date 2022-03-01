@@ -32,7 +32,7 @@ module Generator
     elsif line.include? "hold"
       "And #{line}"
     elsif line.include? "passivate"
-    else
+    elsif !line.empty?
       line[0].upcase + line[1..-1]
     end
   end

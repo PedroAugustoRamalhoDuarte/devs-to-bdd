@@ -11,6 +11,9 @@ module Parse::Dnl
     event_hash = {}
     actual_event = nil
     file_data.each do |line|
+      # Ends of dnl file
+      break if line == "passivate in passive!"
+
       line = line.delete("!")
       if line.include? "passivate"
         actual_event = get_passivate_event(line)

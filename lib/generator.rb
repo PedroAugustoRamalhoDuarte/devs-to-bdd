@@ -10,7 +10,9 @@ module Generator
     end
   end
 
-  def self.bdd_from_test_cases(test_cases_hash, feature_name = "Test")
+  def self.bdd_from_ses(example_name, feature_name = "Test")
+    test_cases_hash = Parse::Ses.test_cases_hash(example_name)
+
     File.open "output/#{feature_name}.feature", "w" do |file|
       file.write("Feature: #{feature_name}\n")
       test_cases_hash.each_with_index do |test_case, index|

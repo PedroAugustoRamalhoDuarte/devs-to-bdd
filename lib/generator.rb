@@ -1,5 +1,7 @@
 # Module for generates bdd test file from ms4 files
 module Generator
+  OUTPUT_DIR = File.join(File.dirname(__FILE__), "../output/")
+
   def self.test_case_tag(event, test_case)
     if event == test_case.last
       "Then"
@@ -16,7 +18,7 @@ module Generator
   def self.bdd_from_ses(ses_file_path, feature_name = "Test")
     test_cases_hash = Parse::Ses.test_cases_hash(ses_file_path)
 
-    output_path = "../output/#{feature_name}.feature"
+    output_path = File.join(OUTPUT_DIR, "#{feature_name}.feature")
 
     File.open output_path, "w" do |file|
       file.write("Feature: #{feature_name}\n")
@@ -47,7 +49,7 @@ module Generator
   def self.bdd_from_dnl(file_path, feature_name = "Test")
     test_cases_hash = Parse::Dnl.test_cases_hash(file_path)
 
-    output_path = "../output/#{feature_name}.feature"
+    output_path = File.join(OUTPUT_DIR, "#{feature_name}.feature")
 
     File.open output_path, "w" do |file|
       file.write("Feature: #{feature_name}\n")

@@ -16,6 +16,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
     rspec-support (3.11.0)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   x86_64-linux
@@ -23,6 +24,7 @@ PLATFORMS
 DEPENDENCIES
   dry-cli
   rspec
+  zeitwerk
 
 BUNDLED WITH
    2.3.8

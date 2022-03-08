@@ -8,6 +8,14 @@ class Event
   end
 
   def to_s
-    "#{@sender} send #{@action} to #{@receiver}"
+    "#{@sender} sends #{@action} to #{@receiver}"
+  end
+
+  def to_h
+    {
+      sender: @sender,
+      action: @action,
+      receiver: @receiver
+    }
   end
 end

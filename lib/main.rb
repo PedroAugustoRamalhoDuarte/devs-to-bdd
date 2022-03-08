@@ -19,7 +19,7 @@ module DevsToBDD
       end
 
       class GenerateFromSes < Dry::CLI::Command
-        desc "Generate features files for bdd"
+        desc "Generate features bdd files from ses"
 
         argument :ses_file_path, required: true, desc: ".ses file path"
         argument :output_file_name, desc: "output file name"
@@ -30,13 +30,23 @@ module DevsToBDD
         end
       end
 
+      class GenerateFromDnl < Dry::CLI::Command
+        desc "Generate features bdd files from dnl"
+
+        argument :ses_file_path, required: true, desc: ".ses file path"
+        argument :output_file_name, desc: "output file name"
+
+        def call(ses_file_path:, output_file_name: 'output', **)
+          output_path = Generator::bdd_from_dnl(ses_file_path, output_file_name)
+          puts "File created in #{output_path}"
+        end
+      end
+
       register "version", Version, aliases: %w[v -v --version]
-      register "gen-generator", GenerateFromSes
+      register "ses-generator", GenerateFromSes
+      register "dnl-generator", GenerateFromDnl
     end
   end
 end
 
 Dry::CLI.new(DevsToBDD::CLI::Commands).call
-# Generator::bdd_from_dnl("BankTellerExample", "BankTeller", "BankTellerDNL")
-# Generator::bdd_from_dnl("BankTellerExample", "BankVault", "BankVaultDNL")
-# Generator::bdd_from_dnl("BankTellerExample", "Customer", "CustomerDNL")

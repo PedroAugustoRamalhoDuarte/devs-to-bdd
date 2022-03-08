@@ -3,8 +3,8 @@ module Parse::Dnl
     line.split()[-1]
   end
 
-  def self.test_cases_hash(example_name, dnl_name)
-    dnl_file = File.open("examples/#{example_name}/dnl/#{dnl_name}.dnl")
+  def self.test_cases_hash(file_path)
+    dnl_file = File.open(file_path)
 
     file_data = dnl_file.readlines.map(&:chomp)
 

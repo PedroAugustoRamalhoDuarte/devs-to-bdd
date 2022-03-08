@@ -1,4 +1,4 @@
-# Generatoes bdd test file from test cases hash
+# Module for generates bdd test file from ms4 files
 module Generator
   def self.test_case_tag(event, test_case)
     if event == test_case.last
@@ -10,10 +10,14 @@ module Generator
     end
   end
 
-  def self.bdd_from_ses(example_name, feature_name = "Test")
-    test_cases_hash = Parse::Ses.test_cases_hash(example_name)
+  # Creates feature files from ses file
+  #
+  # @return out_path string
+  def self.bdd_from_ses(ses_file_path, feature_name = "Test")
+    test_cases_hash = Parse::Ses.test_cases_hash(ses_file_path)
 
-    File.open "output/#{feature_name}.feature", "w" do |file|
+    output_path = "../output/#{feature_name}.feature"
+    File.open output_path, "w" do |file|
       file.write("Feature: #{feature_name}\n")
       test_cases_hash.each_with_index do |test_case, index|
         file.write("\tScenario: #{index}\n")
@@ -22,6 +26,8 @@ module Generator
         end
       end
     end
+
+    output_path
   end
 
   def self.convert_dnl_line(line)
@@ -37,8 +43,8 @@ module Generator
     end
   end
 
-  def self.bdd_from_dnl(example_name, dnl_name, feature_name = "Test")
-    test_cases_hash = Parse::Dnl.test_cases_hash(example_name, dnl_name)
+  def self.bdd_from_dnl(file_path, feature_name = "Test")
+    test_cases_hash = Parse::Dnl.test_cases_hash(file_path)
 
     File.open "output/#{feature_name}.feature", "w" do |file|
       file.write("Feature: #{feature_name}\n")

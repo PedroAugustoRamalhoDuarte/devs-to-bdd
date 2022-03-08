@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.5.0)
+    dry-cli (0.7.0)
     rspec (3.11.0)
       rspec-core (~> 3.11.0)
       rspec-expectations (~> 3.11.0)
@@ -20,7 +21,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  dry-cli
   rspec
 
 BUNDLED WITH
-   2.2.15
+   2.3.8

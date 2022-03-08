@@ -11,8 +11,8 @@ module Parse::Ses
                 receiver: line_splited[-1][..-2].strip)
   end
 
-  def self.test_cases_hash(example_name)
-    ses_file = File.open("examples/#{example_name}/ses/#{example_name}.ses")
+  def self.test_cases_hash(file_path)
+    ses_file = File.open(file_path)
 
     file_data = ses_file.readlines.map(&:chomp)
 

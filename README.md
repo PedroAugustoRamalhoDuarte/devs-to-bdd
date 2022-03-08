@@ -8,5 +8,9 @@ Esse projeto tem o objetivo produzir casos de testes no formato de BDD para uma 
 
 # Como rodar?
 
-- Adicione a pasta do seu projeto MS4 em examples
-- 
+- Rode `bundle install` para instalar as depedências
+- Depois utilize a CLI para gerar os casos e testes utilizando `ruby ./lib/main.rb`
+
+# Como rodar os testes?
+
+- `rspec spec`

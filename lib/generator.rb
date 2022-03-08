@@ -17,6 +17,7 @@ module Generator
     test_cases_hash = Parse::Ses.test_cases_hash(ses_file_path)
 
     output_path = "../output/#{feature_name}.feature"
+
     File.open output_path, "w" do |file|
       file.write("Feature: #{feature_name}\n")
       test_cases_hash.each_with_index do |test_case, index|
@@ -46,7 +47,9 @@ module Generator
   def self.bdd_from_dnl(file_path, feature_name = "Test")
     test_cases_hash = Parse::Dnl.test_cases_hash(file_path)
 
-    File.open "output/#{feature_name}.feature", "w" do |file|
+    output_path = "../output/#{feature_name}.feature"
+
+    File.open output_path, "w" do |file|
       file.write("Feature: #{feature_name}\n")
       test_cases_hash.each do |test_case|
         file.write("\tScenario: #{test_case[0]}\n")
@@ -56,5 +59,7 @@ module Generator
         end
       end
     end
+
+    output_path
   end
 end

@@ -1,0 +1,33 @@
+
+accepts input on FadeOut !
+generates output on EndInSequence !
+
+to start, hold in sendPlayBeat for time 1!
+after sendPlayBeat output PlayBeat!
+from sendPlayBeat go to waitforBeat!
+passivate in waitforBeat !
+when in waitforBeat and receive Beat go to sendPlayBrass!
+hold in sendPlayBrass for time 1!
+after sendPlayBrass output PlayBrass!
+from sendPlayBrass go to waitforBrassSound!
+passivate in waitforBrassSound !
+when in waitforBrassSound and receive BrassSound go to sendDontPlay!
+hold in sendDontPlay for time 1!
+after sendDontPlay output DontPlay!
+from sendDontPlay go to waitforQuiet!
+passivate in waitforQuiet !
+when in waitforQuiet and receive Quiet go to sendPlayReed!
+hold in sendPlayReed for time 1!
+after sendPlayReed output PlayReed!
+from sendPlayReed go to waitforReedSound!
+passivate in waitforReedSound !
+when in waitforReedSound and receive ReedSound go to sendPlayTogether!
+hold in sendPlayTogether for time 1!
+after sendPlayTogether output PlayTogether!
+from sendPlayTogether go to sendEndInSequence!
+hold in sendEndInSequence for time 1!
+after sendEndInSequence output EndInSequence!
+from sendEndInSequence go to waitforFadeOut!
+passivate in waitforFadeOut !
+when in waitforFadeOut and receive FadeOut go to passive!
+passivate in passive!

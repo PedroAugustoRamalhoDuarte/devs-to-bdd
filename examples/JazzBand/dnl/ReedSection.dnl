@@ -1,0 +1,15 @@
+
+accepts input on EndInSequence !
+generates output on FadeOut !
+
+to start,passivate in waitforPlayReed !
+when in waitforPlayReed and receive PlayReed go to sendReedSound!
+hold in sendReedSound for time 1!
+after sendReedSound output ReedSound!
+from sendReedSound go to waitforEndInSequence!
+passivate in waitforEndInSequence !
+when in waitforEndInSequence and receive EndInSequence go to sendFadeOut!
+hold in sendFadeOut for time 1!
+after sendFadeOut output FadeOut!
+from sendFadeOut go to passive!
+passivate in passive!

@@ -1,0 +1,22 @@
+
+accepts input on EndInSequence !
+generates output on FadeOut !
+
+to start,passivate in waitforPlayBrass !
+when in waitforPlayBrass and receive PlayBrass go to sendBrassSound!
+hold in sendBrassSound for time 1!
+after sendBrassSound output BrassSound!
+from sendBrassSound go to waitforDontPlay!
+passivate in waitforDontPlay !
+when in waitforDontPlay and receive DontPlay go to sendQuiet!
+hold in sendQuiet for time 1!
+after sendQuiet output Quiet!
+from sendQuiet go to waitforPlayTogether!
+passivate in waitforPlayTogether !
+when in waitforPlayTogether and receive PlayTogether go to waitforEndInSequence!
+passivate in waitforEndInSequence !
+when in waitforEndInSequence and receive EndInSequence go to sendFadeOut!
+hold in sendFadeOut for time 1!
+after sendFadeOut output FadeOut!
+from sendFadeOut go to passive!
+passivate in passive!

@@ -44,9 +44,24 @@ module DevsToBDD
         end
       end
 
+      class BulkGenerateFromDnl < Dry::CLI::Command
+        desc 'Generate all bdd features from dnl inside ms4 project'
+
+        argument :project_file_path, required: true, desc: 'project file path'
+
+        def call(project_file_path:, **)
+          Dir["#{project_file_path}/dnl/**/*.dnl"].each do |dnl_file_path|
+            output_file_name = dnl_file_path.split('/')[-1][..-5]
+            output_path = Generator.bdd_from_dnl(dnl_file_path, output_file_name)
+            puts "File created in #{output_path}"
+          end
+        end
+      end
+
       register 'version', Version, aliases: %w[v -v --version]
       register 'ses-generator', GenerateFromSes
       register 'dnl-generator', GenerateFromDnl
+      register 'dnl-bulk-generator', BulkGenerateFromDnl
     end
   end
 end

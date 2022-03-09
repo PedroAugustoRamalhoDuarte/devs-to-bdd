@@ -2,7 +2,6 @@
 
 module Parse
   module Dnl
-
     # Extract event from a passivate line
     # @example
     #

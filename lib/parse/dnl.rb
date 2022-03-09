@@ -6,6 +6,10 @@ module Parse
       line.split[-1]
     end
 
+    def self.get_start_event(line)
+      line.split[2..4].join(' ')
+    end
+
     def self.test_cases_hash(file_path)
       dnl_file = File.open(file_path)
 
@@ -18,8 +22,12 @@ module Parse
         break if line == 'passivate in passive!'
 
         line = line.delete('!')
-        if line.include? 'passivate'
+        if line.include?('passivate')
           actual_event = get_passivate_event(line)
+          event_hash[actual_event] = []
+          event_hash[actual_event].append(line)
+        elsif line.include?('to start') && line.include?('hold')
+          actual_event = get_start_event(line)
           event_hash[actual_event] = []
           event_hash[actual_event].append(line)
         elsif actual_event

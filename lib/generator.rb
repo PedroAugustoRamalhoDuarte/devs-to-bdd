@@ -40,6 +40,8 @@ module Generator
       "Then sends #{line.split[-1]}"
     elsif line.include? 'from'
       "And go to #{line.split[-1]}"
+    elsif line.include?('to start') && line.include?('hold')
+      "When holding #{line.split(',')[1][6..]}"
     elsif line.include? 'hold'
       "And #{line}"
     elsif line.include? 'passivate'

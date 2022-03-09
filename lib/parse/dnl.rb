@@ -2,10 +2,19 @@
 
 module Parse
   module Dnl
+
+    # Extract event from a passivate line
+    # @example
+    #
+    # Parse::dnl.get_passivate_event("to start,passivate in waitforHello") # => "waitforHello"
     def self.get_passivate_event(line)
       line.split[-1]
     end
 
+    # Extract event from a start action line
+    # @example
+    #
+    # Parse::dnl.get_start_event("to start, hold in sendHello for time 1!") # => "hold in sendHello"
     def self.get_start_event(line)
       line.split[2..4].join(' ')
     end

@@ -13,13 +13,15 @@ internal event for sendCollectThermometerData
 <%//place your own code for internal event here.
 %>!
 passivate in waitforGoodThermometerData !
-when in waitforGoodThermometerData and receive GoodThermometerData go to sendCollectThermometerData2!external event for waitforGoodThermometerData with GoodThermometerData
+when in waitforGoodThermometerData and receive GoodThermometerData go to sendCollectThermometerData2!
+external event for waitforGoodThermometerData with GoodThermometerData
 <%//Add your own code
 Serializable variable = messageList.get(0).getData();
 %>!
 hold in sendCollectThermometerData2 for time 1!
 after sendCollectThermometerData2 output CollectThermometerData2!
-from sendCollectThermometerData2 go to waitforBadThermometerData!output event for sendCollectThermometerData2
+from sendCollectThermometerData2 go to waitforBadThermometerData!
+output event for sendCollectThermometerData2
 <%//Add your own code
 output.add(outCollectThermometerData2,null);
 %>!
@@ -28,7 +30,8 @@ internal event for sendCollectThermometerData2
 <%//place your own code for internal event here.
 %>!
 passivate in waitforBadThermometerData !
-when in waitforBadThermometerData and receive BadThermometerData go to sendAlert!external event for waitforBadThermometerData with BadThermometerData
+when in waitforBadThermometerData and receive BadThermometerData go to sendAlert!
+external event for waitforBadThermometerData with BadThermometerData
 <%//Add your own code
 Serializable variable = messageList.get(0).getData();
 %>!

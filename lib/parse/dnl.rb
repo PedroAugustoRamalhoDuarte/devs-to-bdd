@@ -25,16 +25,31 @@ module Parse
 
       event_hash = {}
       actual_event = nil
+      ignore_line = false
       file_data.each do |line|
         # Ends of dnl file
         break if line == 'passivate in passive!'
 
         line = line.delete('!')
-        if line.include?('passivate')
+
+        if line.include?('%>')
+          # Close Custom code
+          ignore_line = false
+          next
+        end
+
+        next if ignore_line
+
+        if line.include?('internal event') || line.include?('<%') || line.include?('external event') || line.include?('output event')
+          # Ignore custom code lines
+          ignore_line = true
+        elsif line.include?('passivate')
+          # Passive elements start conditions
           actual_event = get_passivate_event(line)
           event_hash[actual_event] = []
           event_hash[actual_event].append(line)
         elsif line.include?('to start') && line.include?('hold')
+          # Initial elements start condition
           actual_event = get_start_event(line)
           event_hash[actual_event] = []
           event_hash[actual_event].append(line)

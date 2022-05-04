@@ -33,9 +33,9 @@ module Parse
           # If the first sender is now the receiver
           if event.receiver == event_list[0].sender
             # TODO: Check this logic (BSNExample vs JazzBand)
-            # Check if next line sender is receiver
             next_line = file_data[index + 1]
             next_line_event = extract_event(next_line)
+            # Check if next line sender is receiver and is the last line
             if (next_line_event.sender == event.receiver) && (file_data.length == index + 2)
               event_list.append(next_line_event)
             end

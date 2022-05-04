@@ -19,7 +19,8 @@ module Parse
     end
 
     def self.initial_custom_code_keyword(line)
-      line.include?('internal event') || line.include?('<%') || line.include?('external event') || line.include?('output event')
+      line.include?('internal event') || line.include?('<%') ||
+        line.include?('external event') || line.include?('output event')
     end
 
     def self.test_cases_hash(file_path)

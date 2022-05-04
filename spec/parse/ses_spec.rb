@@ -2,9 +2,10 @@
 
 require_relative '../lib/parse/ses'
 
-describe 'Parser' do
+describe 'Parse::Ses' do
   describe '#extract_event' do
     let(:line) { 'From the BankTellerExamplesys perspective, Customer sends Hello to BankTeller!' }
+
     it 'returns components and action type' do
       expect(Parse::Ses.extract_event(line).to_s).to eq('Customer sends Hello to BankTeller')
     end

@@ -1,0 +1,9 @@
+
+accepts input on Alert !
+
+to start, passivate in waitforAlert !
+when in waitforAlert and receive Alert go to waitforAlert!
+external event for waitforAlert with Alert
+<%//Add your own code
+Serializable variable = messageList.get(0).getData();
+%>!

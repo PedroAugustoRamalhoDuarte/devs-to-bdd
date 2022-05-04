@@ -1,0 +1,8 @@
+From the BSNsys perspective, BSN is made of  CentralHub, Collector, Thermometer, and AlertSystem!
+From the BSNsys perspective, CentralHub sends CollectThermometerData to Collector!
+From the BSNsys perspective, Collector sends CollectData to Thermometer!
+From the BSNsys perspective, Thermometer sends GoodThermometerData to CentralHub!
+From the BSNsys perspective, CentralHub sends CollectThermometerData2 to Collector!
+From the BSNsys perspective, Collector sends CollectData2 to Thermometer!
+From the BSNsys perspective, Thermometer sends BadThermometerData to CentralHub!
+From the BSNsys perspective, CentralHub sends Alert to AlertSystem!

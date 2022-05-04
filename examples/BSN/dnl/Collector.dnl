@@ -1,0 +1,36 @@
+
+accepts input on CollectThermometerData2 !
+generates output on CollectData2 !
+
+to start, passivate in waitforCollectThermometerData !
+when in waitforCollectThermometerData and receive CollectThermometerData go to sendCollectData!
+external event for waitforCollectThermometerData with CollectThermometerData
+<%//Add your own code
+Serializable variable = messageList.get(0).getData();
+%>!
+hold in sendCollectData for time 1!
+after sendCollectData output CollectData!
+from sendCollectData go to waitforCollectThermometerData2!output event for sendCollectData
+<%//Add your own code
+output.add(outCollectData,null);
+%>!
+
+internal event for sendCollectData
+<%//place your own code for internal event here.
+%>!
+passivate in waitforCollectThermometerData2 !
+when in waitforCollectThermometerData2 and receive CollectThermometerData2 go to sendCollectData2!external event for waitforCollectThermometerData2 with CollectThermometerData2
+<%//Add your own code
+Serializable variable = messageList.get(0).getData();
+%>!
+hold in sendCollectData2 for time 1!
+after sendCollectData2 output CollectData2!
+from sendCollectData2 go to passive!
+output event for sendCollectData2
+<%//Add your own code
+output.add(outCollectData2,null);
+%>!
+internal event for sendCollectData2
+<%//place your own code for internal event here.
+%>!
+passivate in passive!

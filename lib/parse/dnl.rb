@@ -18,6 +18,10 @@ module Parse
       line.split[2..4].join(' ')
     end
 
+    def self.initial_custom_code_keyword(line)
+      line.include?('internal event') || line.include?('<%') || line.include?('external event') || line.include?('output event')
+    end
+
     def self.test_cases_hash(file_path)
       dnl_file = File.open(file_path)
 
@@ -40,7 +44,7 @@ module Parse
 
         next if ignore_line
 
-        if line.include?('internal event') || line.include?('<%') || line.include?('external event') || line.include?('output event')
+        if initial_custom_code_keyword(line)
           # Ignore custom code lines
           ignore_line = true
         elsif line.include?('passivate')

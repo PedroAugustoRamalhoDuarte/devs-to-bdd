@@ -23,3 +23,6 @@ Metrics/PerceivedComplexity:
 
 Metrics/AbcSize:
   Max: 30
+
+Metrics/BlockNesting:
+  Max: 4

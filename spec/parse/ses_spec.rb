@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/parse/ses'
+require_relative '../../lib/parse/ses'
 
 describe 'Parse::Ses' do
   describe '#extract_event' do

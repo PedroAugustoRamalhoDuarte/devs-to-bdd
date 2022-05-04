@@ -34,12 +34,13 @@ module Parse
           if event.receiver == event_list[0].sender
             # TODO: Check this logic (BSNExample vs JazzBand)
             next_line = file_data[index + 1]
-            next_line_event = extract_event(next_line)
-            # Check if next line sender is receiver and is the last line
-            if (next_line_event.sender == event.receiver) && (file_data.length == index + 2)
-              event_list.append(next_line_event)
+            unless next_line.nil?
+              next_line_event = extract_event(next_line)
+              # Check if next line sender is receiver and is the last line
+              if (next_line_event.sender == event.receiver) && (file_data.length == index + 2)
+                event_list.append(next_line_event)
+              end
             end
-
             # Closes one test case
             test_cases.append(event_list.dup)
             event_list.clear

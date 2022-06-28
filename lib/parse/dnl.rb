@@ -18,9 +18,19 @@ module Parse
       line.split[2..4].join(' ')
     end
 
+    # Checks if lines is custom code begin
+    #
+    # @return [Boolean]
     def self.initial_custom_code_keyword(line)
       line.include?('internal event') || line.include?('<%') ||
         line.include?('external event') || line.include?('output event')
+    end
+
+    # Checks if lines is custom code end
+    #
+    # @return [Boolean]
+    def self.end_custom_code_keyword(line)
+      line.include?('%>')
     end
 
     def self.test_cases_hash(file_path)
@@ -37,7 +47,7 @@ module Parse
 
         line = line.delete('!')
 
-        if line.include?('%>')
+        if end_custom_code_keyword(line)
           # Close Custom code
           ignore_line = false
           next

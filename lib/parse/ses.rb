@@ -6,6 +6,9 @@ require_relative 'main'
 # Parse .ses file from
 module Parse
   module Ses
+    # Extract event from a ses file line and creates event
+    #
+    # @return [Event]
     def self.extract_event(line)
       delimiters = [/\bto\b/, /\bsends\b/]
       line = line.split(',')[1]

@@ -4,6 +4,9 @@
 module Generator
   OUTPUT_DIR = File.join(File.dirname(__FILE__), '../output/')
 
+  # Returns cucumber keyword based onde event order
+  #
+  # @return [String]
   def self.test_case_tag(event, test_case)
     if event == test_case.last
       'Then'
@@ -16,7 +19,7 @@ module Generator
 
   # Creates feature files from ses file
   #
-  # @return out_path string
+  # @return [String] Output path
   def self.bdd_from_ses(ses_file_path, feature_name = 'Test')
     test_cases_hash = Parse::Ses.test_cases_hash(ses_file_path)
 
@@ -35,6 +38,9 @@ module Generator
     output_path
   end
 
+  # Convert a dnl line to a cucumber instruction
+  #
+  # @return [String]
   def self.convert_dnl_line(line)
     if line.include? 'output'
       "Then sends #{line.split[-1]}"
@@ -51,6 +57,9 @@ module Generator
     end
   end
 
+  # Creates feature files from dnl file
+  #
+  # @return [String] Output path
   def self.bdd_from_dnl(file_path, feature_name = 'Test')
     test_cases_hash = Parse::Dnl.test_cases_hash(file_path)
 

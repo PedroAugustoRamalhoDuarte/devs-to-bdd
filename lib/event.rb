@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Class for handle event from ses file
+# the option parser
+#
+# attr_reader :sender, :action, :receiver
 class Event
   attr_reader :sender, :action, :receiver
 

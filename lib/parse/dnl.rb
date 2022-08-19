@@ -46,6 +46,7 @@ module Parse
         break if line == 'passivate in passive!'
 
         line = line.delete('!')
+        line = line.strip
 
         if end_custom_code_keyword(line)
           # Close Custom code

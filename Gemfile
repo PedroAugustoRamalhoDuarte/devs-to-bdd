@@ -16,4 +16,7 @@ group :development do
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rspec'
+
+  # Code coverage for Ruby with a powerful configuration library and automatic merging of coverage across test suites
+  gem 'simplecov'
 end

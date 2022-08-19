@@ -2,3 +2,5 @@
 devs-to-bdd.iml
 
 output/*.feature
+
+coverage

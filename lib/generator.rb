@@ -62,7 +62,6 @@ module Generator
   # @return [String] Output path
   def self.bdd_from_dnl(file_path, feature_name = 'Test')
     test_cases_hash = Parse::Dnl.test_cases_hash(file_path)
-    puts test_cases_hash
     output_path = File.join(OUTPUT_DIR, "#{feature_name}.feature")
 
     File.open output_path, 'w' do |file|

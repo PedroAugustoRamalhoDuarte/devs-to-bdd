@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../event'
-require_relative 'main'
 
 # Parse .ses file from
 module Parse

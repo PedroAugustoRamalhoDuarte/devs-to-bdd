@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../translator'
+
 class Translator::Dnl
   # Creates feature files from dnl file
   #

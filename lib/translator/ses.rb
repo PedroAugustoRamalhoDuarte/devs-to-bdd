@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../translator'
+
 class Translator::Ses
   # Creates feature files from ses file
   #

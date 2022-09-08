@@ -45,6 +45,7 @@ class Parse::Dnl
     end
 
     dnl_file.close
+    puts event_hash
     event_hash
   end
 

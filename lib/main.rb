@@ -52,7 +52,7 @@ module DevsToBDD
         def call(project_file_path:, **)
           Dir["#{project_file_path}/dnl/**/*.dnl"].each do |dnl_file_path|
             output_file_name = dnl_file_path.split('/')[-1][..-5]
-            output_path = Generator.bdd_from_dnl(dnl_file_path, output_file_name)
+            output_path = Generator.new.bdd_from_dnl(dnl_file_path, output_file_name)
             puts "File created in #{output_path}"
           end
         end

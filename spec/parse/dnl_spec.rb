@@ -15,7 +15,7 @@ describe Parse::Dnl do
     end
 
     it 'returns right event test cases' do
-      expect(described_class.test_cases_hash(example_name)['waitforHello']).to eq(test_case_wait_for_hello)
+      expect(described_class.new.test_cases_hash(example_name)['waitforHello']).to eq(test_case_wait_for_hello)
     end
   end
 end

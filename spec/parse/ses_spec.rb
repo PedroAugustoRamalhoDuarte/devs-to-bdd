@@ -8,7 +8,7 @@ describe Parse::Ses do
     let(:line) { 'From the BankTellerExamplesys perspective, Customer sends Hello to BankTeller!' }
 
     it 'returns components and action type' do
-      expect(described_class.extract_event(line).to_s).to eq('Customer sends Hello to BankTeller')
+      expect(described_class.new.send(:extract_event, line).to_s).to eq('Customer sends Hello to BankTeller')
     end
   end
 
@@ -30,7 +30,7 @@ describe Parse::Ses do
     end
 
     it 'returns right event test cases' do
-      expect(described_class.test_cases_hash(example_name)[0].map(&:to_h)).to eq(test_case_one)
+      expect(described_class.new.test_cases_hash(example_name)[0].map(&:to_h)).to eq(test_case_one)
     end
   end
 end

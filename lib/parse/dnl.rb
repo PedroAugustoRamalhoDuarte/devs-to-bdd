@@ -11,7 +11,7 @@ module Parse
       actual_event = nil
       ignore_line = false
       file_data.each do |line|
-        # Ends of dnl file
+        # Ends of dnl FILE
         break if line == 'passivate in passive!'
 
         line = line.delete('!')

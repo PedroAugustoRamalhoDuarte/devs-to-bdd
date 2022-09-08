@@ -1,39 +1,8 @@
 # frozen_string_literal: true
 
 module Parse
-  module Dnl
-    # Extract event from a passivate line
-    # @example
-    #
-    # Parse::dnl.get_passivate_event("to start,passivate in waitforHello") # => "waitforHello"
-    def self.get_passivate_event(line)
-      line.split[-1]
-    end
-
-    # Extract event from a start action line
-    # @example
-    #
-    # Parse::dnl.get_start_event("to start, hold in sendHello for time 1!") # => "hold in sendHello"
-    def self.get_start_event(line)
-      line.split[2..4].join(' ')
-    end
-
-    # Checks if lines is custom code begin
-    #
-    # @return [Boolean]
-    def self.initial_custom_code_keyword(line)
-      line.include?('internal event') || line.include?('<%') ||
-        line.include?('external event') || line.include?('output event')
-    end
-
-    # Checks if lines is custom code end
-    #
-    # @return [Boolean]
-    def self.end_custom_code_keyword(line)
-      line.include?('%>')
-    end
-
-    def self.test_cases_hash(file_path)
+  class Dnl
+    def test_cases_hash(file_path)
       dnl_file = File.open(file_path)
 
       file_data = dnl_file.readlines.map(&:chomp)
@@ -76,6 +45,39 @@ module Parse
 
       dnl_file.close
       event_hash
+    end
+
+    private
+
+    # Extract event from a passivate line
+    # @example
+    #
+    # Parse::dnl.get_passivate_event("to start,passivate in waitforHello") # => "waitforHello"
+    def get_passivate_event(line)
+      line.split[-1]
+    end
+
+    # Extract event from a start action line
+    # @example
+    #
+    # Parse::dnl.get_start_event("to start, hold in sendHello for time 1!") # => "hold in sendHello"
+    def get_start_event(line)
+      line.split[2..4].join(' ')
+    end
+
+    # Checks if lines is custom code begin
+    #
+    # @return [Boolean]
+    def initial_custom_code_keyword(line)
+      line.include?('internal event') || line.include?('<%') ||
+        line.include?('external event') || line.include?('output event')
+    end
+
+    # Checks if lines is custom code end
+    #
+    # @return [Boolean]
+    def end_custom_code_keyword(line)
+      line.include?('%>')
     end
   end
 end

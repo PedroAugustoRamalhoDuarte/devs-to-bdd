@@ -5,20 +5,8 @@ require_relative 'main'
 
 # Parse .ses file from
 module Parse
-  module Ses
-    # Extract event from a ses file line and creates event
-    #
-    # @return [Event]
-    def self.extract_event(line)
-      delimiters = [/\bto\b/, /\bsends\b/]
-      line = line.split(',')[1]
-      line_splited = line.split(Regexp.union(delimiters))
-      ::Event.new(sender: line_splited[-3].strip,
-                  action: line_splited[-2].strip,
-                  receiver: line_splited[-1][..-2].strip)
-    end
-
-    def self.test_cases_hash(file_path)
+  class Ses
+    def test_cases_hash(file_path)
       ses_file = File.open(file_path)
 
       file_data = ses_file.readlines.map(&:chomp)
@@ -54,6 +42,20 @@ module Parse
       ses_file.close
 
       test_cases
+    end
+
+    private
+
+    # Extract event from a ses file line and creates event
+    #
+    # @return [Event]
+    def extract_event(line)
+      delimiters = [/\bto\b/, /\bsends\b/]
+      line = line.split(',')[1]
+      line_splited = line.split(Regexp.union(delimiters))
+      ::Event.new(sender: line_splited[-3].strip,
+                  action: line_splited[-2].strip,
+                  receiver: line_splited[-1][..-2].strip)
     end
   end
 end

@@ -27,7 +27,7 @@ module DevsToBDD
         argument :output_file_name, desc: 'output file name'
 
         def call(ses_file_path:, output_file_name: 'output', **)
-          output_path = Generator.bdd_from_ses(ses_file_path, output_file_name)
+          output_path = Generator::Ses.new.bdd_from_ses(ses_file_path, output_file_name)
           puts "File created in #{output_path}"
         end
       end
@@ -39,7 +39,7 @@ module DevsToBDD
         argument :output_file_name, desc: 'output file name'
 
         def call(dnl_file_path:, output_file_name: 'output', **)
-          output_path = Generator.bdd_from_dnl(dnl_file_path, output_file_name)
+          output_path = Generator::Dnl.new.bdd_from_dnl(dnl_file_path, output_file_name)
           puts "File created in #{output_path}"
         end
       end

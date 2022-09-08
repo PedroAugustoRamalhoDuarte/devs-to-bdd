@@ -5,7 +5,7 @@ class Translator::Ses
   #
   # @return [String] Output path
   def bdd_from_ses(test_cases_hash, feature_name = 'Test')
-    output_path = File.join(Generator::OUTPUT_DIR, "#{feature_name}.feature")
+    output_path = File.join(Translator::OUTPUT_DIR, "#{feature_name}.feature")
 
     File.open output_path, 'w' do |file|
       file.write("Feature: #{feature_name}\n")

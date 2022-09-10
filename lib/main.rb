@@ -27,9 +27,8 @@ module DevsToBDD
         argument :output_file_name, desc: 'output file name'
 
         def call(ses_file_path:, output_file_name: 'output', **)
-          test_case_hash = Parse::Ses.new.test_cases_hash(ses_file_path)
-          output_path = Translator::Ses.new.bdd_from_ses(test_case_hash, output_file_name)
-          puts "File created in #{output_path}"
+          generator = Generator.new(Parse::Ses.new, Translator::Ses.new)
+          puts "File created in #{generator.generate_bdd_file(ses_file_path, output_file_name)}"
         end
       end
 
@@ -40,9 +39,8 @@ module DevsToBDD
         argument :output_file_name, desc: 'output file name'
 
         def call(dnl_file_path:, output_file_name: 'output', **)
-          test_case_hash = Parse::Dnl.new.test_cases_hash(dnl_file_path)
-          output_path = Translator::Dnl.new.bdd_from_dnl(test_case_hash, output_file_name)
-          puts "File created in #{output_path}"
+          generator = Generator.new(Parse::Dnl.new, Translator::Dnl.new)
+          puts "File created in #{generator.generate_bdd_file(dnl_file_path, output_file_name)}"
         end
       end
 
@@ -56,9 +54,8 @@ module DevsToBDD
           translator = Translator::Dnl.new
           Dir["#{project_file_path}/dnl/**/*.dnl"].each do |dnl_file_path|
             output_file_name = dnl_file_path.split('/')[-1][..-5]
-            output_path = translator.bdd_from_dnl(parser.test_cases_hash(dnl_file_path),
-                                                  output_file_name)
-            puts "File created in #{output_path}"
+            generator = Generator.new(parser, translator)
+            puts "File created in #{generator.generate_bdd_file(dnl_file_path, output_file_name)}"
           end
         end
       end

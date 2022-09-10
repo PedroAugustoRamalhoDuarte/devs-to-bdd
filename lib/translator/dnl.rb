@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require_relative '../translator'
+require_relative 'strategy'
 
-class Translator::Dnl
+class Translator::Dnl < Translator::Strategy
   # Creates feature files from dnl file
   #
   # @return [String] Output path

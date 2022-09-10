@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require_relative '../translator'
+require_relative 'strategy'
 
-class Translator::Ses
+class Translator::Ses < Translator::Strategy
   # Creates feature files from ses file
   #
   # @return [String] Output path

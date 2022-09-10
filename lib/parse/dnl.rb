@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 require_relative '../parse'
+require_relative 'strategy'
 
-class Parse::Dnl
+class Parse::Dnl < Parse::Strategy
   def test_cases_hash(file_path)
     dnl_file = File.open(file_path)
 
@@ -15,8 +16,7 @@ class Parse::Dnl
       # Ends of dnl FILE
       break if line == 'passivate in passive!'
 
-      line = line.delete('!')
-      line = line.strip
+      line = line.delete('!').strip
 
       if end_custom_code_keyword(line)
         # Close Custom code
@@ -45,7 +45,6 @@ class Parse::Dnl
     end
 
     dnl_file.close
-    puts event_hash
     event_hash
   end
 

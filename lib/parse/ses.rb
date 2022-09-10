@@ -2,9 +2,10 @@
 
 require_relative '../parse'
 require_relative '../event'
+require_relative 'strategy'
 
 # Parse .ses file from
-class Parse::Ses
+class Parse::Ses < Parse::Strategy
   def test_cases_hash(file_path)
     ses_file = File.open(file_path)
 

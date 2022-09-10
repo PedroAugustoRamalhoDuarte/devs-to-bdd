@@ -7,7 +7,7 @@ class Translator::Dnl < Translator::Strategy
   # Creates feature files from dnl file
   #
   # @return [String] Output path
-  def bdd_from_dnl(test_cases_hash, feature_name = 'Test')
+  def bdd_from_hash(test_cases_hash, feature_name = 'Test')
     output_path = File.join(Translator::OUTPUT_DIR, "#{feature_name}.feature")
 
     File.open output_path, 'w' do |file|

@@ -5,7 +5,7 @@ require_relative '../../lib/event'
 require_relative '../../lib/translator/ses'
 
 describe Translator::Ses do
-  describe '.bdd_from_ses' do
+  describe '.bdd_from_hash' do
     let(:buffer) { StringIO.new }
     let(:filename) { 'output' }
     let(:filepath) { "#{Translator::OUTPUT_DIR}#{filename}.feature" }
@@ -20,7 +20,7 @@ describe Translator::Ses do
 
     before do
       allow(File).to receive(:open).with(filepath, 'w').and_yield(buffer)
-      described_class.new.bdd_from_ses(events, filename)
+      described_class.new.bdd_from_hash(events, filename)
     end
 
     it 'includes feature name' do

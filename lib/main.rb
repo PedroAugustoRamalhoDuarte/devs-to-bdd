@@ -20,6 +20,7 @@ module DevsToBDD
         end
       end
 
+      # Command for generate bdd from ses
       class GenerateFromSes < Dry::CLI::Command
         desc 'Generate features bdd files from ses'
 
@@ -32,6 +33,7 @@ module DevsToBDD
         end
       end
 
+      # Command for generate bdd from dnl
       class GenerateFromDnl < Dry::CLI::Command
         desc 'Generate features bdd files from dnl'
 
@@ -44,17 +46,18 @@ module DevsToBDD
         end
       end
 
+      # Command for generate bdd from multiple dnl files
       class BulkGenerateFromDnl < Dry::CLI::Command
         desc 'Generate all bdd features from dnl inside ms4 project'
 
         argument :project_file_path, required: true, desc: 'project file path'
 
         def call(project_file_path:, **)
-          parser = Parser::Dnl.new
+          parser = Parse::Dnl.new
           translator = Translator::Dnl.new
+          generator = Generator.new(parser, translator)
           Dir["#{project_file_path}/dnl/**/*.dnl"].each do |dnl_file_path|
             output_file_name = dnl_file_path.split('/')[-1][..-5]
-            generator = Generator.new(parser, translator)
             puts "File created in #{generator.generate_bdd_file(dnl_file_path, output_file_name)}"
           end
         end

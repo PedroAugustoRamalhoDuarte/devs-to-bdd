@@ -4,7 +4,7 @@ require_relative '../spec_helper'
 require_relative '../../lib/translator/dnl'
 
 describe Translator::Dnl do
-  describe '.bdd_from_ses' do
+  describe '.bdd_from_hash' do
     let(:buffer) { StringIO.new }
     let(:filename) { 'output' }
     let(:filepath) { "#{Translator::OUTPUT_DIR}#{filename}.feature" }
@@ -18,7 +18,7 @@ describe Translator::Dnl do
 
     before do
       allow(File).to receive(:open).with(filepath, 'w').and_yield(buffer)
-      described_class.new.bdd_from_dnl(test_case_hash, filename)
+      described_class.new.bdd_from_hash(test_case_hash, filename)
     end
 
     it 'includes feature name' do

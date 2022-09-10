@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Context to generate bdd files choseing parse and translator strategy
 class Generator
   attr_writer :parser, :translator
 

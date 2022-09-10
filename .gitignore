@@ -1,6 +1,13 @@
+# IDEA
 .idea
 devs-to-bdd.iml
 
+# Output
 output/*.feature
 
+# Specs
 coverage
+
+# Docs
+.yardoc
+doc

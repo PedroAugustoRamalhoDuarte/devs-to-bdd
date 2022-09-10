@@ -3,7 +3,9 @@
 require_relative '../parse'
 require_relative 'strategy'
 
+# Defines strategy for parse dnl files
 class Parse::Dnl < Parse::Strategy
+  # @see Parse::Strategy#test_cases_hash
   def test_cases_hash(file_path)
     dnl_file = File.open(file_path)
 
@@ -51,17 +53,19 @@ class Parse::Dnl < Parse::Strategy
   private
 
   # Extract event from a passivate line
+  #
   # @example
   #
-  # Parse::dnl.get_passivate_event("to start,passivate in waitforHello") # => "waitforHello"
+  #   Parse::dnl.get_passivate_event("to start,passivate in waitforHello") # => "waitforHello"
   def get_passivate_event(line)
     line.split[-1]
   end
 
   # Extract event from a start action line
+  #
   # @example
   #
-  # Parse::dnl.get_start_event("to start, hold in sendHello for time 1!") # => "hold in sendHello"
+  #   Parse::dnl.get_start_event("to start, hold in sendHello for time 1!") # => "hold in sendHello"
   def get_start_event(line)
     line.split[2..4].join(' ')
   end

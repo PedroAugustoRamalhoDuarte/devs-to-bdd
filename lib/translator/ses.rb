@@ -7,7 +7,7 @@ class Translator::Ses < Translator::Strategy
   # Creates feature files from ses file
   #
   # @return [String] Output path
-  def bdd_from_ses(test_cases_hash, feature_name = 'Test')
+  def bdd_from_hash(test_cases_hash, feature_name = 'Test')
     output_path = File.join(Translator::OUTPUT_DIR, "#{feature_name}.feature")
 
     File.open output_path, 'w' do |file|
@@ -25,6 +25,7 @@ class Translator::Ses < Translator::Strategy
 
   private
 
+  # Convert test case into cucumber keyword
   def test_case_tag(event, test_case)
     if event == test_case.last
       'Then'

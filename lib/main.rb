@@ -22,7 +22,7 @@ module DevsToBDD
 
       # Command for generate bdd from ses
       class GenerateFromSes < Dry::CLI::Command
-        desc 'Generate features bdd files from ses'
+        desc 'Generate bdd feature file from ms4 .ses file'
 
         argument :ses_file_path, required: true, desc: '.ses file path'
         argument :output_file_name, desc: 'output file name'
@@ -35,7 +35,7 @@ module DevsToBDD
 
       # Command for generate bdd from dnl
       class GenerateFromDnl < Dry::CLI::Command
-        desc 'Generate features bdd files from dnl'
+        desc 'Generate bdd feature file from ms4 .dnl file'
 
         argument :dnl_file_path, required: true, desc: '.dnl file path'
         argument :output_file_name, desc: 'output file name'
@@ -48,7 +48,7 @@ module DevsToBDD
 
       # Command for generate bdd from multiple dnl files
       class BulkGenerateFromDnl < Dry::CLI::Command
-        desc 'Generate all bdd features from dnl inside ms4 project'
+        desc 'Generate all bdd features from dnl folder inside ms4 project'
 
         argument :project_file_path, required: true, desc: 'project file path'
 

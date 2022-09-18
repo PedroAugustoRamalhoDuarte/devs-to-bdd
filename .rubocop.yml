@@ -14,7 +14,7 @@ Style/ClassAndModuleChildren:
   Enabled: false
 
 Metrics/BlockLength:
-  IgnoredMethods: [ 'describe', 'context' ]
+  AllowedMethods: [ 'describe', 'context' ]
 
 Metrics/MethodLength:
   Max: 30

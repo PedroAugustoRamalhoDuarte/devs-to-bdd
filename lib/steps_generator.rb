@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class to generate step definitions for a cucumber file
 class StepsGenerator
   # @param input [String] input file string

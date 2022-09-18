@@ -33,7 +33,7 @@ module DevsToBDD
           file = generator.generate_bdd_file(ses_file_path, output_file_name)
           puts "File created in #{file}"
 
-          StepsGenerator.new.call(file) if options[:steps]
+          StepDefinitions.new.call(file_path: file) if options[:steps]
         end
       end
 
@@ -50,7 +50,7 @@ module DevsToBDD
           file = generator.generate_bdd_file(dnl_file_path, output_file_name)
           puts "File created in #{file}"
 
-          StepsGenerator.new.call(file) if options[:steps]
+          StepDefinitions.new.call(file_path: file) if options[:steps]
         end
       end
 
@@ -84,7 +84,7 @@ module DevsToBDD
         argument :file_path, required: true, desc: '.feature file path'
         argument :output_file_path, desc: 'output file path'
 
-        def call(file_path:, output_file_path: 'output.rb', **)
+        def call(file_path:, output_file_path: 'output/step_definitions/steps.rb', **)
           StepsGenerator.new.call(file_path, output_file_path)
           puts "File created in #{output_file_path}"
         end

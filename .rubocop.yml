@@ -5,6 +5,7 @@ require:
 AllCops:
   TargetRubyVersion: 3.1
   NewCops: enable
+  Exclude: [ 'output/**/*' ]
 
 Style/Documentation:
   Enabled: false

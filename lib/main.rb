@@ -4,7 +4,7 @@ require 'bundler/setup'
 require 'dry/cli'
 
 require 'zeitwerk'
-loader = Zeitwerk::Loader.for_gem
+loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
 loader.setup
 
 module DevsToBDD
@@ -33,7 +33,7 @@ module DevsToBDD
           file = generator.generate_bdd_file(ses_file_path, output_file_name)
           puts "File created in #{file}"
 
-          StepDefinitions.new.call(file_path: file) if options[:steps]
+          StepDefinitions.new.call(file_path: file) if options[:steps] == 'true'
         end
       end
 
@@ -45,12 +45,12 @@ module DevsToBDD
         argument :output_file_name, desc: 'output file name'
         option :steps, default: 'false', values: %w[true false], desc: 'Generate step definitions'
 
-        def call(dnl_file_path:, output_file_name: 'output', **)
+        def call(dnl_file_path:, output_file_name: 'output', **options)
           generator = Generator.new(Parse::Dnl.new, Translator::Dnl.new)
           file = generator.generate_bdd_file(dnl_file_path, output_file_name)
           puts "File created in #{file}"
 
-          StepDefinitions.new.call(file_path: file) if options[:steps]
+          StepDefinitions.new.call(file_path: file) if options[:steps] == 'true'
         end
       end
 
@@ -70,7 +70,7 @@ module DevsToBDD
             output_path = generator.generate_bdd_file(dnl_file_path, output_file_name)
             puts "File created in #{output_path}"
 
-            if options[:steps]
+            if options[:steps] == 'true'
               step_output_path = File.join("#{Translator::OUTPUT_DIR}/step_definitions", "#{output_file_name}.rb")
               StepDefinitions.new.call(file_path: output_path, output_file_path: step_output_path)
             end

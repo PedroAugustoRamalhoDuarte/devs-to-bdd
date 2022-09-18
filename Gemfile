@@ -6,6 +6,8 @@ source 'https://rubygems.org'
 gem 'dry-cli'
 # Efficient and thread-safe code loader for Ruby
 gem 'zeitwerk'
+# Cucumber for Ruby. It's amazing!
+gem 'cucumber'
 
 group :development do
   # Test

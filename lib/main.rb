@@ -16,7 +16,7 @@ module DevsToBDD
         desc 'Print version'
 
         def call(*)
-          puts '0.2'
+          puts '0.3'
         end
       end
 

@@ -4,6 +4,7 @@ devs-to-bdd.iml
 
 # Output
 output/*.feature
+output/**/*.rb
 
 # Specs
 coverage

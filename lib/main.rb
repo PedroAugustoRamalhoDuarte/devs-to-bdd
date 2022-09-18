@@ -26,10 +26,14 @@ module DevsToBDD
 
         argument :ses_file_path, required: true, desc: '.ses file path'
         argument :output_file_name, desc: 'output file name'
+        option :steps, default: 'false', values: %w[true false], desc: 'Generate step definitions'
 
-        def call(ses_file_path:, output_file_name: 'output', **)
+        def call(ses_file_path:, output_file_name: 'output', **options)
           generator = Generator.new(Parse::Ses.new, Translator::Ses.new)
-          puts "File created in #{generator.generate_bdd_file(ses_file_path, output_file_name)}"
+          file = generator.generate_bdd_file(ses_file_path, output_file_name)
+          puts "File created in #{file}"
+
+          StepsGenerator.new.call(file) if options[:steps]
         end
       end
 
@@ -39,10 +43,14 @@ module DevsToBDD
 
         argument :dnl_file_path, required: true, desc: '.dnl file path'
         argument :output_file_name, desc: 'output file name'
+        option :steps, default: 'false', values: %w[true false], desc: 'Generate step definitions'
 
         def call(dnl_file_path:, output_file_name: 'output', **)
           generator = Generator.new(Parse::Dnl.new, Translator::Dnl.new)
-          puts "File created in #{generator.generate_bdd_file(dnl_file_path, output_file_name)}"
+          file = generator.generate_bdd_file(dnl_file_path, output_file_name)
+          puts "File created in #{file}"
+
+          StepsGenerator.new.call(file) if options[:steps]
         end
       end
 
@@ -51,22 +59,42 @@ module DevsToBDD
         desc 'Generate all bdd features from dnl folder inside ms4 project'
 
         argument :project_file_path, required: true, desc: 'project file path'
+        option :steps, default: 'false', values: %w[true false], desc: 'Generate step definitions'
 
-        def call(project_file_path:, **)
+        def call(project_file_path:, **options)
           parser = Parse::Dnl.new
           translator = Translator::Dnl.new
           generator = Generator.new(parser, translator)
           Dir["#{project_file_path}/dnl/**/*.dnl"].each do |dnl_file_path|
             output_file_name = dnl_file_path.split('/')[-1][..-5]
-            puts "File created in #{generator.generate_bdd_file(dnl_file_path, output_file_name)}"
+            output_path = generator.generate_bdd_file(dnl_file_path, output_file_name)
+            puts "File created in #{output_path}"
+
+            if options[:steps]
+              step_output_path = File.join("#{Translator::OUTPUT_DIR}/step_definitions", "#{output_file_name}.rb")
+              StepDefinitions.new.call(file_path: output_path, output_file_path: step_output_path)
+            end
           end
         end
       end
 
+      class StepDefinitions < Dry::CLI::Command
+        desc 'Generate step definitions from a feature file'
+
+        argument :file_path, required: true, desc: '.feature file path'
+        argument :output_file_path, desc: 'output file path'
+
+        def call(file_path:, output_file_path: 'output.rb', **)
+          StepsGenerator.new.call(file_path, output_file_path)
+          puts "File created in #{output_file_path}"
+        end
+      end
+
       register 'version', Version, aliases: %w[v -v --version]
-      register 'ses-generator', GenerateFromSes
-      register 'dnl-generator', GenerateFromDnl
-      register 'dnl-bulk-generator', BulkGenerateFromDnl
+      register 'ses-generator', GenerateFromSes, aliases: %w[ses]
+      register 'dnl-generator', GenerateFromDnl, aliases: %w[dnl]
+      register 'dnl-bulk-generator', BulkGenerateFromDnl, aliases: %w[dnl-bulk]
+      register 'steps-definition', StepDefinitions, aliases: %w[steps]
     end
   end
 end

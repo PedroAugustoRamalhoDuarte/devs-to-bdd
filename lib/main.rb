@@ -33,7 +33,7 @@ module DevsToBDD
           file = generator.generate_bdd_file(ses_file_path, output_file_name)
           puts "File created in #{file}"
 
-          StepDefinitions.new.call(file_path: file) if options[:steps] == 'true'
+          GenerateStepsDefinitions.new.call(file_path: file) if options[:steps] == 'true'
         end
       end
 
@@ -50,7 +50,7 @@ module DevsToBDD
           file = generator.generate_bdd_file(dnl_file_path, output_file_name)
           puts "File created in #{file}"
 
-          StepDefinitions.new.call(file_path: file) if options[:steps] == 'true'
+          GenerateStepsDefinitions.new.call(file_path: file) if options[:steps] == 'true'
         end
       end
 
@@ -72,13 +72,13 @@ module DevsToBDD
 
             if options[:steps] == 'true'
               step_output_path = File.join("#{Translator::OUTPUT_DIR}/step_definitions", "#{output_file_name}.rb")
-              StepDefinitions.new.call(file_path: output_path, output_file_path: step_output_path)
+              GenerateStepsDefinitions.new.call(file_path: output_path, output_file_path: step_output_path)
             end
           end
         end
       end
 
-      class StepDefinitions < Dry::CLI::Command
+      class GenerateStepsDefinitions < Dry::CLI::Command
         desc 'Generate step definitions from a feature file'
 
         argument :file_path, required: true, desc: '.feature file path'
@@ -94,7 +94,7 @@ module DevsToBDD
       register 'ses-generator', GenerateFromSes, aliases: %w[ses]
       register 'dnl-generator', GenerateFromDnl, aliases: %w[dnl]
       register 'dnl-bulk-generator', BulkGenerateFromDnl, aliases: %w[dnl-bulk]
-      register 'steps-definition', StepDefinitions, aliases: %w[steps]
+      register 'steps-generator', GenerateStepsDefinitions, aliases: %w[steps]
     end
   end
 end
